@@ -15,12 +15,44 @@ class Todo extends React.Component {
   };
 
   consoleClick(n) {
-    console.log(n);
+    console.log(this.state);
+    const t = { ...this.state };
+    console.log(t);
   }
 
   onClickTodo(item) {
     console.log(item);
   }
+
+  onChangeInput = (event, id) => {};
+
+  onKeyEnter = (event, id) => {
+    if (event.key === 'Enter' && event.target.value) {
+      const todoItem = [...this.state.todoItem];
+      todoItem.push({
+        id: id + 1,
+        text: event.target.value,
+        done: false,
+      });
+      console.log(todoItem);
+
+      this.setState({
+        todoItem,
+      });
+      event.target.value = '';
+    }
+  };
+
+  onClickDeleteHandler = (id) => {
+    const todoItem = [...this.state.todoItem];
+
+    const newTodoItem = todoItem.filter((item) => item.id !== id);
+    console.log(todoItem);
+
+    this.setState({
+      todoItem: newTodoItem,
+    });
+  };
 
   render() {
     return (
@@ -28,8 +60,11 @@ class Todo extends React.Component {
         <Todolist
           todoItem={this.state.todoItem}
           onClickTodo={this.onClickTodo}
+          onChangeInput={this.onChangeInput}
+          onKeyEnter={this.onKeyEnter}
+          onClickDelete={this.onClickDeleteHandler}
         />
-        {/* <div onClick={this.consoleClick.bind(this)}>Консоль</div> */}
+        <div onClick={this.consoleClick}>Консоль</div>
       </div>
     );
   }
