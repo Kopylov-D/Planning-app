@@ -2,22 +2,22 @@ import React from 'react';
 
 const TodoItem = (props) => {
   return (
-    <div className="row">
-      <li
-        className="list-group-item col"
-        onClick={() => props.onClickTodo(props.item.id)}
-      >
+    <li
+      className="list-group-item note"
+      onClick={() => props.onClickTodo(props.item.id)}
+    >
+      <div>
         <strong> {props.item.id}</strong>. {props.item.text}
-      </li>
+      </div>
+
       <button
         type="button"
-        style={{ width: '15px' }}
-        className="btn btn-danger align-self-center"
+        className="btn btn-danger btn-sm"
         onClick={() => props.onClickDelete(props.item.id)}
       >
-        x
+        &times;
       </button>
-    </div>
+    </li>
   );
 };
 

@@ -7,9 +7,13 @@ const Todolist = (props) => {
       <h2>Задачи на день</h2>
       <ul className="list-group">
         {props.todoItem.map((item, index) => {
-  
           return (
-            <TodoItem key={index} item={item} onClickTodo={props.onClickTodo} onClickDelete={props.onClickDelete}/>
+            <TodoItem
+              key={index}
+              item={item}
+              onClickTodo={props.onClickTodo}
+              onClickDelete={props.onClickDelete}
+            />
           );
         })}
       </ul>
@@ -25,7 +29,9 @@ const Todolist = (props) => {
             className="form-control"
             placeholder="Введите задачу"
             onChange={props.onChangeInput}
-            onKeyDown={(event) => props.onKeyEnter(event, props.todoItem.length)}
+            onKeyDown={(event) =>
+              props.onKeyEnter(event, props.todoItem.length)
+            }
           />
         </div>
       </Fragment>
