@@ -3,16 +3,18 @@ import TodoItem from './TodoItem/TodoItem';
 
 const Todolist = (props) => {
   return (
-    <div className={'todolist'}>
-      <h2>Задачи на день</h2>
+    <div className="todolist">
+      <h2>{props.todoName}</h2>
       <ul className="list-group">
-        {props.todoItem.map((item, index) => {
+        {props.todo.map((todo, index) => {
           return (
             <TodoItem
               key={index}
-              item={item}
+              todo={todo}
+              subtasksIsOpen={props.subtasksIsOpen}
               onClickTodo={props.onClickTodo}
               onClickDelete={props.onClickDelete}
+              onChecked={props.onChecked}
             />
           );
         })}
@@ -29,9 +31,7 @@ const Todolist = (props) => {
             className="form-control"
             placeholder="Введите задачу"
             onChange={props.onChangeInput}
-            onKeyDown={(event) =>
-              props.onKeyEnter(event, props.todoItem.length)
-            }
+            onKeyDown={(event) => props.onKeyEnter(event, props.todo.length)}
           />
         </div>
       </Fragment>
