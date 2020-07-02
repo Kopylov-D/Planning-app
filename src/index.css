@@ -39,3 +39,11 @@ code {
   font-size: small;
   padding: 5px 5px 5px 40px;
 }
+
+.sub button {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  text-align: center;
+
+}

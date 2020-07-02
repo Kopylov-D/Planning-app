@@ -6,15 +6,18 @@ const Todolist = (props) => {
     <div className="todolist">
       <h2>{props.todoName}</h2>
       <ul className="list-group">
-        {props.todo.map((todo, index) => {
+        {props.todos.map((todo, index) => {
           return (
             <TodoItem
               key={index}
               todo={todo}
-              subtasksIsOpen={props.subtasksIsOpen}
+              subtasksIsOpen={todo.subtasksIsOpen}
+              subtasks={props.subtasks}
               onClickTodo={props.onClickTodo}
               onClickDelete={props.onClickDelete}
+              onClickDeleteSubtask={props.onClickDeleteSubtask}
               onChecked={props.onChecked}
+              onClickSubtaskOpen={props.onClickSubtaskOpen}
             />
           );
         })}
@@ -31,7 +34,7 @@ const Todolist = (props) => {
             className="form-control"
             placeholder="Введите задачу"
             onChange={props.onChangeInput}
-            onKeyDown={(event) => props.onKeyEnter(event, props.todo.length)}
+            onKeyDown={(event) => props.onKeyEnter(event, props.todos.length)}
           />
         </div>
       </Fragment>

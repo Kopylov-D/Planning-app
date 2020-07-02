@@ -1,25 +1,21 @@
 import React from 'react';
 import Todolist from '../components/Todolist/Todolist';
 
-function createString(n) {
-  let arr = [];
-  for (let i = 0; i <= n; i++) {
-    arr.push({ id: i, text: `Задача ${i}`, done: false, main: false });
-  }
-  return arr;
-}
-
 class Todo extends React.Component {
   state = {
     todoName: this.props.todoName,
-    todoItem: {
-      todo: [
-        { id: 0, text: `Задача 1`, done: false, main: true },
-        { id: 1, text: `Задача 2`, done: false, main: false },
-        { id: 2, text: `Задача 3`, done: false, main: true },
-      ],
-      subtasksIsOpen: false,
-    },
+    todos: [
+      { id: 0, text: `Задача 1`, done: false, subtasksIsOpen: true },
+      { id: 1, text: `Задача 2`, done: false, subtasksIsOpen: false },
+      { id: 2, text: `Задача 3`, done: false, subtasksIsOpen: false },
+    ],
+    subtasks: [
+      { id: 0, idTodo: 0, text: `Задача 1/1`, done: false },
+      { id: 1, idTodo: 0, text: `Задача 1/2`, done: false },
+      { id: 2, idTodo: 1, text: `Задача 1/3`, done: false },
+      { id: 3, idTodo: 2, text: `Задача 1/4`, done: false },
+      { id: 4, idTodo: 2, text: `Задача 1/5`, done: false },
+    ],
   };
 
   consoleClick = (n) => {
@@ -33,39 +29,41 @@ class Todo extends React.Component {
 
   onKeyEnter = (event, id) => {
     if (event.key === 'Enter' && event.target.value) {
-      const todoItem = { ...this.state.todoItem };
-      const todo = todoItem.todo;
-      todo.push({
+      const todos = [...this.state.todos];
+
+      todos.push({
         id: id + 1,
         text: event.target.value,
         done: false,
-        main: true,
+        subtasksIsOpen: true,
       });
-      todoItem.todo = todo
 
       this.setState({
-        todoItem,
+        todos,
       });
       event.target.value = '';
     }
   };
 
   onClickDeleteHandler = (id) => {
-    const todoItem = { ...this.state.todoItem };
-    let todo = todoItem.todo;
+    let todos = [...this.state.todos];
 
-    todo = todo.filter((item) => item.id !== id);
-    todoItem.todo = todo
+    todos = todos.filter((item) => item.id !== id);
+
     this.setState({
-      todoItem
+      todos,
     });
   };
 
+  onClickDeleteSubtaskHandler = (id, parentId) => {
+    const todos = { ...this.state.todos };
+  };
+
   onCheckedHandler = (id) => {
-    const todoItem = [...this.state.todoItem.todo];
+    const todos = [...this.state.todos];
 
     this.setState(
-      todoItem.map((todo) => {
+      todos.map((todo) => {
         if (todo.id === id) {
           todo.done = !todo.done;
         }
@@ -73,18 +71,31 @@ class Todo extends React.Component {
     );
   };
 
+  onClickSubtaskOpenHandler = (id) => {
+    const todos = [...this.state.todos];
+
+    this.setState(
+      todos.map((todo) =>
+        todo.id === id ? (todo.subtasksIsOpen = !todo.subtasksIsOpen) : null
+      )
+    );
+  };
+
   render() {
     return (
       <div>
         <Todolist
-          todo={this.state.todoItem.todo}
+          todos={this.state.todos}
           todoName={this.state.todoName}
-          subtasksIsOpen={this.state.todoItem.subtasksIsOpen}
+          subtasks={this.state.subtasks}
+          // subtasksIsOpen={this.state.todoItem.subtasksIsOpen}
           onClickTodo={this.onClickTodo}
           onChangeInput={this.onChangeInput}
           onKeyEnter={this.onKeyEnter}
           onClickDelete={this.onClickDeleteHandler}
+          onClickDeleteSubtask={this.onClickDeleteSubtaskHandler}
           onChecked={this.onCheckedHandler}
+          onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
         />
         <div onClick={this.consoleClick}>Консоль</div>
       </div>

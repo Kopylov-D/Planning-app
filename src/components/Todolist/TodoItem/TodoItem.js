@@ -3,9 +3,13 @@ import SubTask from './SubTask';
 
 const TodoItem = (props) => {
   const classes = [];
-
+ 
   if (props.todo.done) {
     classes.push('done');
+  }
+
+  if (props.className) {
+    classes.push(props.className);
   }
 
   return (
@@ -24,6 +28,14 @@ const TodoItem = (props) => {
           {props.todo.text}
         </div>
 
+        <div class="btn-group dropright">
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm  dropdown-toggle"
+            onClick={() => props.onClickSubtaskOpen(props.todo.id)}
+          ></button>
+        </div>
+
         <button
           type="button"
           className="btn btn-danger btn-sm"
@@ -32,20 +44,16 @@ const TodoItem = (props) => {
           &times;
         </button>
       </li>
-      {props.subtasksIsOpen ?
-       props.todo.map((todo, index) => {
-        return (
-          <TodoItem
-            key={index}
-            todo={todo}
-            subtasksIsOpen={props.subtasksIsOpen}
-            onClickTodo={props.onClickTodo}
-            onClickDelete={props.onClickDelete}
-            onChecked={props.onChecked}
-          />
-        );
-      })
-      : null}
+
+      {props.subtasksIsOpen ? (
+        <ul className="list-group">
+          {props.subtasks.map((task, index) => {
+            return (
+              <SubTask key={index} subtask={task} todoId={props.todo.id} />
+            );
+          })}
+        </ul>
+      ) : null}
     </Fragment>
   );
 };
