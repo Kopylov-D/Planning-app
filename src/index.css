@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,9 +12,30 @@ code {
     monospace;
 }
 
+.todolist {
+  min-width: 300px;
+}
 
 .note {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.checkBox {
+  margin-right: 20px;
+}
+
+.done {
+  text-decoration: line-through;
+}
+
+.main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sub {
+  font-size: small;
+  padding: 5px 5px 5px 40px;
 }

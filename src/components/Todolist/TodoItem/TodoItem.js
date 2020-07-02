@@ -1,23 +1,52 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import SubTask from './SubTask';
 
 const TodoItem = (props) => {
-  return (
-    <li
-      className="list-group-item note"
-      onClick={() => props.onClickTodo(props.item.id)}
-    >
-      <div>
-        {props.item.text} <small>{new Date().toLocaleDateString()}</small>
-      </div>
+  const classes = [];
 
-      <button
-        type="button"
-        className="btn btn-danger btn-sm"
-        onClick={() => props.onClickDelete(props.item.id)}
+  if (props.todo.done) {
+    classes.push('done');
+  }
+
+  return (
+    <Fragment>
+      <li
+        className="list-group-item note"
+        onClick={() => props.onClickTodo(props.todo.id)}
       >
-        &times;
-      </button>
-    </li>
+        <div className={classes.join(' ')}>
+          <input
+            type="checkbox"
+            checked={props.todo.done}
+            className="checkBox"
+            onChange={() => props.onChecked(props.todo.id)}
+          ></input>
+          {props.todo.text}
+        </div>
+
+        <button
+          type="button"
+          className="btn btn-danger btn-sm"
+          onClick={() => props.onClickDelete(props.todo.id)}
+        >
+          &times;
+        </button>
+      </li>
+      {props.subtasksIsOpen ?
+       props.todo.map((todo, index) => {
+        return (
+          <TodoItem
+            key={index}
+            todo={todo}
+            subtasksIsOpen={props.subtasksIsOpen}
+            onClickTodo={props.onClickTodo}
+            onClickDelete={props.onClickDelete}
+            onChecked={props.onChecked}
+          />
+        );
+      })
+      : null}
+    </Fragment>
   );
 };
 
