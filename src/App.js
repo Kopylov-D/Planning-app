@@ -5,8 +5,10 @@ import Todo from './containers/Todo';
 
 function App() {
   return (
-    <div className={'container-sm'}>
-      <Todo />
+    <div className={'container-sm row'}>
+      <Todo className={'col-3'}/>
+      <Todo className={'col-3'}/>
+      <Todo className={'col-3'}/>
     </div>
   );
 }

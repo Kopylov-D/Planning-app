@@ -4,7 +4,7 @@ import TodoItem from './TodoItem/TodoItem';
 const Todolist = (props) => {
   return (
     <div className={'todolist'}>
-      <h2>Задачи на день</h2>
+      <h2>{props.header}</h2>
       <ul className="list-group">
         {props.todoItem.map((item, index) => {
           return (

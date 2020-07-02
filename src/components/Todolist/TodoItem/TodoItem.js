@@ -7,7 +7,7 @@ const TodoItem = (props) => {
       onClick={() => props.onClickTodo(props.item.id)}
     >
       <div>
-        <strong> {props.item.id}</strong>. {props.item.text}
+        {props.item.text} <small>{new Date().toLocaleDateString()}</small>
       </div>
 
       <button

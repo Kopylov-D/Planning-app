@@ -11,14 +11,15 @@ function createString(n) {
 
 class Todo extends React.Component {
   state = {
+    header: 'Задачи',
     todoItem: createString(3),
   };
 
-  consoleClick(n) {
-    console.log(this.state);
+  consoleClick = () => {
+    console.log();
     const t = { ...this.state };
     console.log(t);
-  }
+  };
 
   onClickTodo(item) {
     console.log(item);
@@ -34,7 +35,6 @@ class Todo extends React.Component {
         text: event.target.value,
         done: false,
       });
-      console.log(todoItem);
 
       this.setState({
         todoItem,
@@ -45,9 +45,7 @@ class Todo extends React.Component {
 
   onClickDeleteHandler = (id) => {
     const todoItem = [...this.state.todoItem];
-
     const newTodoItem = todoItem.filter((item) => item.id !== id);
-    console.log(todoItem);
 
     this.setState({
       todoItem: newTodoItem,
@@ -59,6 +57,7 @@ class Todo extends React.Component {
       <div>
         <Todolist
           todoItem={this.state.todoItem}
+          header={this.state.header}
           onClickTodo={this.onClickTodo}
           onChangeInput={this.onChangeInput}
           onKeyEnter={this.onKeyEnter}
