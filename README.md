@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+https://pikabu.ru/story/blokirovka_reklamyi_za_2_minutyi_v_2020_godu_7560547#comments
+
 ## Available Scripts
 
 In the project directory, you can run:

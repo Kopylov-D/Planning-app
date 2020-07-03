@@ -16,10 +16,11 @@ code {
   min-width: 300px;
 }
 
-.note {
+.todo {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 3px;
 }
 
 .checkBox {
@@ -37,7 +38,8 @@ code {
 
 .sub {
   font-size: small;
-  padding: 5px 5px 5px 40px;
+  padding: 1px 5px 1px 40px;
+  margin: 0;
 }
 
 .sub button {
@@ -47,3 +49,23 @@ code {
   text-align: center;
 
 }
+
+.sub input {
+  /* width: 20px; */
+  padding:0 1rem 0;
+  margin: 0;
+
+  height: 20px;
+
+}
+
+.btn-toggle {
+  /* border-radius: 50%; */
+  border: 1px solid rgb(0, 0, 0);
+  padding: 0;
+  background:#fff;
+  margin-left: 5px;
+  width: 10px;
+  height: 10px;
+}
+
