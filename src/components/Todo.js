@@ -1,6 +1,5 @@
 import React from 'react';
-import TodoItem from '../components/TodoItem';
-
+import TodoItem from './TodoItem';
 
 const Todo = (props) => {
   return (
@@ -15,36 +14,38 @@ const Todo = (props) => {
                 todo={todo}
                 todoName={props.todoName}
                 subtasksIsOpen={todo.subtasksIsOpen}
-                subtasks={props.subtasks}
+                subtasks={props.todos}
+                notes={props.notes}
                 onClickTodo={props.onClickTodo}
                 onClickDelete={props.onClickDelete}
-                onClickDeleteSubtask={props.onClickDeleteSubtask}
-                onKeyEnterSubtask={props.onKeyEnterSubtask}
+                // onClickDeleteSubtask={props.onClickDeleteSubtask}
+                onInputSubtask={props.onInputSubtask}
                 onChecked={props.onChecked}
                 onClickSubtaskOpen={props.onClickSubtaskOpen}
                 onClickDecomposeOnTodo={props.onClickDecomposeOnTodo}
+                onChangeNotes={props.onChangeNotes}
               />
-            )
+            );
           }
-         
+
           // ) : null}
         })}
       </ul>
       {/* <Fragment> */}
-        <div className="input-group flex-nowrap">
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="addon-wrapping">
-              +
-            </span>
-          </div>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Новая задача"
-            onChange={props.onChangeInput}
-            onKeyDown={(event) => props.onKeyEnter(event, props.todoName)}
-          />
+      <div className="input-group flex-nowrap">
+        <div className="input-group-prepend">
+          <span className="input-group-text" id="addon-wrapping">
+            +
+          </span>
         </div>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Новая задача"
+          onChange={props.onChangeInput}
+          onKeyDown={(event) => props.onInputTodo(event, props.todoName)}
+        />
+      </div>
       {/* </Fragment> */}
     </div>
   );

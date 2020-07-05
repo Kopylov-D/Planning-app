@@ -3,28 +3,19 @@ import React from 'react';
 const SubTask = (props) => {
   const classes = [];
 
-  if (props.done) {
+  if (props.subtask.done) {
     classes.push('done');
   }
 
-  // const decomposeOnTodo = (subtask, idCategory) => {
-  //   return {
-  //     id: subtask.id,
-  //     idCategory,
-  //     text: subtask.text,
-  //     done: false,
-  //     subtasksIsOpen: false,
-  //   };
-  // };
-
   return (
     <div>
-      {props.subtask.idTodo === props.todoId ? (
+      {/* {props.subtask.idTodo === props.idTodo ? ( */}
         <li className="list-group-item todo sub">
-          <button 
-          type="button"
-          onClick={(event) => props.onClickDecomposeOnTodo(event, props.subtask)}
-            >
+          <button
+            type="button"
+            className={'btn btn-primary btn-sm'}
+            // onClick={() => props.onClickDecomposeOnTodo(props.subtask)}
+          >
             -
           </button>
           <div className={classes.join(' ')}>{props.subtask.text}</div>
@@ -32,12 +23,12 @@ const SubTask = (props) => {
           <button
             type="button"
             className="btn btn-danger btn-sm sub"
-            onClick={() => props.onClickDeleteSubtask(props.subtask.id)}
+            onClick={() => props.onClickDelete(props.subtask.id)}
           >
             &times;
           </button>
         </li>
-      ) : null}
+      {/* ) : console.log(props)} */}
     </div>
   );
 };
