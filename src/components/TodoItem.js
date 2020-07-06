@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import SubTask from './SubTask';
+import Task from './Task';
 
 const TodoItem = (props) => {
   const classes = ['todo'];
@@ -14,7 +14,7 @@ const TodoItem = (props) => {
 
   return (
     <Fragment>
-      {!props.todo.isSubtask ? (
+      {/* {!props.todo.isSubtask ? ( */}
         <Fragment>
           <li
             className="list-group-item todo"
@@ -25,13 +25,19 @@ const TodoItem = (props) => {
                 type="checkbox"
                 checked={props.todo.done}
                 className="checkBox"
-                onChange={() => props.onChecked(props.todo.id, props.todo.idDecompose, props.todo)}
+                onChange={() =>
+                  props.onChecked(
+                    props.todo.id,
+                    props.todo.idDecompose,
+                    props.todo
+                  )
+                }
               ></input>
               {props.todo.text}
               <button
                 type="button"
                 className="btn-toggle"
-                onClick={() => props.onClickSubtaskOpen(props.todo.id)}
+                onClick={() => props.openTasks(props.todo.id)}
               ></button>
             </div>
 
@@ -44,21 +50,18 @@ const TodoItem = (props) => {
             </button>
           </li>
         </Fragment>
-      ) : null}
+      {/* ) : null} */}
 
-      {props.subtasksIsOpen ? (
+      {props.todo.tasksIsOpen ? (
         <ul className="list-group sub">
-          {props.subtasks
-            .filter(
-              (subtask) => subtask.idTodo === props.todo.id && subtask.isSubtask
-            )
-            .map((subtask, index) => {
+          {props.tasks
+            .filter((task) => task.idTodo === props.todo.id)
+            .map((task, index) => {
               return (
-                <SubTask
+                <Task
                   key={index}
-                  subtask={subtask}
+                  task={task}
                   idTodo={props.todo.id}
-                  done={subtask.done}
                   onClickDelete={props.onClickDelete}
                   onClickDecomposeTodo={props.onClickDecomposeTodo}
                 />
@@ -71,11 +74,10 @@ const TodoItem = (props) => {
               placeholder="Новая подзадача"
               onChange={props.onChangeInput}
               onKeyDown={(event) =>
-                props.onInputSubtask(
+                props.addTask(
                   event,
                   props.todo.id,
                   props.todo.idCategory,
-                  props.todo.idDecompose
                 )
               }
             />

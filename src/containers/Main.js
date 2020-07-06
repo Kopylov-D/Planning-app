@@ -13,78 +13,57 @@ export class Main extends Component {
     todos: [
       {
         id: 0,
-        idCategory: 'День',
-        text: `Задача 1`,
+        category: 'День',
+        text: 'Задача 1',
         done: false,
-        subtasksIsOpen: true,
-        isSubtask: false,
-        idTodo: 0,
+        tasksIsOpen: true,
       },
       {
         id: 1,
-        idCategory: 'День',
-        text: `Задача 2`,
+        category: 'Неделя',
+        text: 'Задача 2',
         done: false,
-        subtasksIsOpen: false,
-        isSubtask: true,
-        idTodo: 0,
-      },
-      {
-        id: 2,
-        idCategory: 'Неделя',
-        text: `Задача 3`,
-        done: false,
-        subtasksIsOpen: false,
-        isSubtask: false,
-        idTodo: 2,
+        tasksIsOpen: true,
       },
       {
         id: 3,
-        idCategory: 'Неделя',
-        text: `Задача 4`,
+        category: 'Неделя',
+        text: 'Задача 3',
         done: false,
-        subtasksIsOpen: true,
-        isSubtask: false,
-        idTodo: 3,
+        tasksIsOpen: true,
       },
       {
         id: 4,
-        idCategory: 'Месяц',
-        text: `Задача 5`,
+        category: 'Месяц',
+        text: 'Задача 4',
         done: false,
-        subtasksIsOpen: false,
-        isSubtask: false,
-        idTodo: 0,
-      },
-      {
-        id: 5,
-        idCategory: 'Месяц',
-        text: `Задача 6`,
-        done: false,
-        subtasksIsOpen: false,
-        isSubtask: true,
-        idTodo: 4,
+        tasksIsOpen: true,
       },
     ],
-    // subtasks: [
-    //   { id: 230, idTodo: 0, text: `Задача 1/1`, done: false },
-    //   { id: 123, idTodo: 0, text: `Задача 1/2`, done: false },
-    //   { id: 2434, idTodo: 1, text: `Задача 1/3`, done: false },
-    //   { id: 34545, idTodo: 2, text: `Задача 1/4`, done: false },
-    //   { id: 5656654, idTodo: 2, text: `Задача 1/5`, done: false },
-    //   { id: 56566542545, idTodo: 3, text: `Задача 1/5`, done: false },
-    // ],
+    tasks: [
+      { id: 230, idTodo: 0, text: `Задача 1/1`, done: false },
+      { id: 123, idTodo: 0, text: `Задача 1/2`, done: false },
+      { id: 2434, idTodo: 1, text: `Задача 1/3`, done: false },
+      { id: 34545, idTodo: 2, text: `Задача 1/4`, done: false },
+      { id: 5656654, idTodo: 2, text: `Задача 1/5`, done: false },
+      { id: 56566542545, idTodo: 3, text: `Задача 1/5`, done: false },
+    ],
     notes: [{ id: 12323, idTodo: 0, text: 'Заметки по задаче' }],
+    colors: [
+      { id: 1, hex: '#81C784', name: 'green' },
+      { id: 1, hex: '#FF8A65', name: 'orange' },
+      { id: 1, hex: '#7986CB', name: 'indigo' },
+    ],
   };
 
   onClickTodo = () => {};
 
-  onInputTodoHandler = (event, idCategory, idTodo, idDecompose) => {
+  addTodo = (event, idCategory, idTodo, idDecompose) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
       const id = ID();
-      console.log(idTodo)
+      console.log(idTodo);
 
       todos.push({
         id: id,
@@ -95,7 +74,6 @@ export class Main extends Component {
         isSubtask: false,
         idTodo: idTodo ? idTodo : id,
         idDecompose: idDecompose ? idDecompose : id,
-        
       });
 
       notes.push({ id: ID(), idTodo: id, text: '' });
@@ -105,7 +83,6 @@ export class Main extends Component {
         notes,
       });
       event.target.value = '';
-      console.log(todos)
     }
   };
 
@@ -201,21 +178,19 @@ export class Main extends Component {
     // });
 
     if (rootTodo.idCategory === 'Месяц') {
-      todos.map(todo => {
+      todos.map((todo) => {
         if (todo.idDecompose === idDecompose) {
-          todo.done = todoCheck
+          todo.done = todoCheck;
         }
-      })
+      });
     }
-
 
     todos.map((todo) => {
       // if (idDecompose === todo.idDecompose && todo.isSubtask) {
       //   todo.done = todoCheck;
       //   console.log(idDecompose)
-      // } 
+      // }
       if (rootTodo.idCategory === todo.idCategory) {
-
       }
     });
     // let idForSubtask = []
@@ -283,20 +258,22 @@ export class Main extends Component {
     this.setState({
       todos,
     });
-    console.log(todos.map(todo => console.log(todo.text, todo.id, todo.idTodo)))
+    console.log(
+      todos.map((todo) => console.log(todo.text, todo.id, todo.idTodo))
+    );
   };
 
-  onClickSubtaskOpenHandler = (id) => {
+  openTasksHandler = (id) => {
     const todos = [...this.state.todos];
 
     this.setState(
       todos.map((todo) =>
-        todo.id === id ? (todo.subtasksIsOpen = !todo.subtasksIsOpen) : null
+        todo.id === id ? (todo.tasksIsOpen = !todo.tasksIsOpen) : null
       )
     );
   };
 
-  onInputSubtaskHandler = (event, idTodo, idCategory, idDecompose) => {
+  addTask = (event, idTodo, idCategory, idDecompose) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
 
@@ -308,12 +285,12 @@ export class Main extends Component {
 
       todos.push({
         id: ID(),
-        idCategory, 
+        idCategory,
         text: event.target.value,
         done: false,
         isSubtask: true,
-        idTodo, 
-        idDecompose
+        idTodo,
+        idDecompose,
       });
 
       this.setState({
@@ -328,7 +305,7 @@ export class Main extends Component {
     const todoCategory = [...this.state.todoCategory];
     const notes = [...this.state.notes];
 
-    const id = ID()
+    const id = ID();
 
     const todo = todos.find((todo) => todo.id === subtask.idTodo);
     const index = todoCategory.indexOf(todo.idCategory);
@@ -343,7 +320,7 @@ export class Main extends Component {
         done: subtask.done,
         subtasksIsOpen: false,
         idTodo: subtask.idTodo,
-        idDecompose: subtask.idDecompose
+        idDecompose: subtask.idDecompose,
       });
       notes.push({ id: ID(), idTodo: subtask.id, text: '' });
     }
@@ -371,46 +348,27 @@ export class Main extends Component {
   render() {
     return (
       <div className="main">
-        <Todo
-          todoName={this.state.todoCategory[0]}
-          todos={this.state.todos}
-          notes={this.state.notes}
-          onClickTodo={this.onClickTodo}
-          onChangeInput={this.onChangeInput}
-          onInputTodo={this.onInputTodoHandler}
-          onClickDelete={this.onClickDeleteHandler}
-          onChecked={this.onCheckHandler}
-          onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
-          onInputSubtask={this.onInputSubtaskHandler}
-          onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
-          onChangeNotes={this.onChangeNotesHandler}
-        />
-        <Todo
-          todoName={this.state.todoCategory[1]}
-          todos={this.state.todos}
-          onClickTodo={this.onClickTodo}
-          onChangeInput={this.onChangeInput}
-          onInputTodo={this.onInputTodoHandler}
-          onClickDelete={this.onClickDeleteHandler}
-          onChecked={this.onCheckHandler}
-          onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
-          onInputSubtask={this.onInputSubtaskHandler}
-          onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
-          onChangeNotes={this.onChangeNotesHandler}
-        />
-        <Todo
-          todoName={this.state.todoCategory[2]}
-          todos={this.state.todos}
-          onClickTodo={this.onClickTodo}
-          onChangeInput={this.onChangeInput}
-          onInputTodo={this.onInputTodoHandler}
-          onClickDelete={this.onClickDeleteHandler}
-          onChecked={this.onCheckHandler}
-          onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
-          onInputSubtask={this.onInputSubtaskHandler}
-          onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
-          onChangeNotes={this.onChangeNotesHandler}
-        />
+        {this.state.todoCategory.map((category, index) => {
+          return (
+            <Todo
+              key={index}
+              todoName={category}
+              todos={this.state.todos}
+              tasks={this.state.tasks}
+              notes={this.state.notes}
+              colors={this.state.colors}
+              onClickTodo={this.onClickTodo}
+              // addTodo={this.addTodo}
+              addTodo={this.addTodo}
+              onClickDelete={this.onClickDeleteHandler}
+              onChecked={this.onCheckHandler}
+              openTasks={this.openTasksHandler}
+              addTask={this.addTask}
+              onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
+              onChangeNotes={this.onChangeNotesHandler}
+            />
+          );
+        })}
       </div>
     );
   }
