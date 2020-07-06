@@ -9,12 +9,11 @@ const SubTask = (props) => {
 
   return (
     <div>
-      {/* {props.subtask.idTodo === props.idTodo ? ( */}
         <li className="list-group-item todo sub">
           <button
             type="button"
             className={'btn btn-primary btn-sm'}
-            // onClick={() => props.onClickDecomposeOnTodo(props.subtask)}
+            onClick={() => props.onClickDecomposeTodo(props.subtask)}
           >
             -
           </button>
@@ -28,7 +27,6 @@ const SubTask = (props) => {
             &times;
           </button>
         </li>
-      {/* ) : console.log(props)} */}
     </div>
   );
 };

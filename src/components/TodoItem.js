@@ -25,7 +25,7 @@ const TodoItem = (props) => {
                 type="checkbox"
                 checked={props.todo.done}
                 className="checkBox"
-                onChange={() => props.onChecked(props.todo.id)}
+                onChange={() => props.onChecked(props.todo.id, props.todo.idDecompose, props.todo)}
               ></input>
               {props.todo.text}
               <button
@@ -43,29 +43,15 @@ const TodoItem = (props) => {
               &times;
             </button>
           </li>
-          <div className="input-group flex-nowrap sub">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Новая подзадача"
-              onChange={props.onChangeInput}
-              onKeyDown={(event) =>
-                props.onInputSubtask(
-                  event,
-                  props.todo.idTodo,
-                  props.todo.idCategory,
-                  props.todo
-                )
-              }
-            />
-          </div>
         </Fragment>
       ) : null}
 
       {props.subtasksIsOpen ? (
         <ul className="list-group sub">
           {props.subtasks
-            .filter((subtask) => subtask.idTodo === props.todo.id && subtask.isSubtask)
+            .filter(
+              (subtask) => subtask.idTodo === props.todo.id && subtask.isSubtask
+            )
             .map((subtask, index) => {
               return (
                 <SubTask
@@ -74,10 +60,26 @@ const TodoItem = (props) => {
                   idTodo={props.todo.id}
                   done={subtask.done}
                   onClickDelete={props.onClickDelete}
-                  //  onClickDecomposeOnTodo={props.onClickDecomposeOnTodo}
+                  onClickDecomposeTodo={props.onClickDecomposeTodo}
                 />
               );
             })}
+          <div className="input-group flex-nowrap">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Новая подзадача"
+              onChange={props.onChangeInput}
+              onKeyDown={(event) =>
+                props.onInputSubtask(
+                  event,
+                  props.todo.id,
+                  props.todo.idCategory,
+                  props.todo.idDecompose
+                )
+              }
+            />
+          </div>
         </ul>
       ) : null}
 

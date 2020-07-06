@@ -4,7 +4,7 @@ import TodoItem from './TodoItem';
 const Todo = (props) => {
   return (
     <div className="todolist">
-      <h2>{props.todoName}</h2>
+      <h5>{props.todoName}</h5>
       <ul className="list-group">
         {props.todos.map((todo, index) => {
           if (todo.idCategory === props.todoName) {
@@ -18,20 +18,16 @@ const Todo = (props) => {
                 notes={props.notes}
                 onClickTodo={props.onClickTodo}
                 onClickDelete={props.onClickDelete}
-                // onClickDeleteSubtask={props.onClickDeleteSubtask}
                 onInputSubtask={props.onInputSubtask}
                 onChecked={props.onChecked}
                 onClickSubtaskOpen={props.onClickSubtaskOpen}
-                onClickDecomposeOnTodo={props.onClickDecomposeOnTodo}
+                onClickDecomposeTodo={props.onClickDecomposeTodo}
                 onChangeNotes={props.onChangeNotes}
               />
             );
           }
-
-          // ) : null}
         })}
       </ul>
-      {/* <Fragment> */}
       <div className="input-group flex-nowrap">
         <div className="input-group-prepend">
           <span className="input-group-text" id="addon-wrapping">
@@ -43,10 +39,16 @@ const Todo = (props) => {
           className="form-control"
           placeholder="Новая задача"
           onChange={props.onChangeInput}
-          onKeyDown={(event) => props.onInputTodo(event, props.todoName)}
+          onKeyDown={(event) =>
+            props.onInputTodo(
+              event,
+              props.todoName,
+              props.idTodo,
+              props.idDecompose
+            )
+          }
         />
       </div>
-      {/* </Fragment> */}
     </div>
   );
 };

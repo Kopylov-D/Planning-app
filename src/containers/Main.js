@@ -25,45 +25,45 @@ export class Main extends Component {
         idCategory: 'День',
         text: `Задача 2`,
         done: false,
-        subtasksIsOpen: true,
+        subtasksIsOpen: false,
         isSubtask: true,
         idTodo: 0,
       },
       {
         id: 2,
-        idCategory: 'День',
+        idCategory: 'Неделя',
         text: `Задача 3`,
         done: false,
         subtasksIsOpen: false,
-        isSubtask: true,
-        idTodo: 3,
+        isSubtask: false,
+        idTodo: 2,
       },
       {
         id: 3,
-        idCategory: 'День',
+        idCategory: 'Неделя',
         text: `Задача 4`,
         done: false,
         subtasksIsOpen: true,
         isSubtask: false,
-        idTodo: 0,
+        idTodo: 3,
       },
       {
         id: 4,
-        idCategory: 'День',
+        idCategory: 'Месяц',
         text: `Задача 5`,
         done: false,
         subtasksIsOpen: false,
-        isSubtask: true,
+        isSubtask: false,
         idTodo: 0,
       },
       {
         id: 5,
-        idCategory: 'День',
+        idCategory: 'Месяц',
         text: `Задача 6`,
         done: false,
         subtasksIsOpen: false,
         isSubtask: true,
-        idTodo: 3,
+        idTodo: 4,
       },
     ],
     // subtasks: [
@@ -79,11 +79,12 @@ export class Main extends Component {
 
   onClickTodo = () => {};
 
-  onInputTodoHandler = (event, idCategory) => {
+  onInputTodoHandler = (event, idCategory, idTodo, idDecompose) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
       const id = ID();
+      console.log(idTodo)
 
       todos.push({
         id: id,
@@ -91,7 +92,10 @@ export class Main extends Component {
         text: event.target.value,
         done: false,
         subtasksIsOpen: false,
-        idTodo: id,
+        isSubtask: false,
+        idTodo: idTodo ? idTodo : id,
+        idDecompose: idDecompose ? idDecompose : id,
+        
       });
 
       notes.push({ id: ID(), idTodo: id, text: '' });
@@ -101,6 +105,7 @@ export class Main extends Component {
         notes,
       });
       event.target.value = '';
+      console.log(todos)
     }
   };
 
@@ -114,7 +119,7 @@ export class Main extends Component {
     });
   };
 
-  // onCheckedHandler = (id) => {
+  // onCheckHandler = (id) => {
   //   const todos = [...this.state.todos];
   //   const subtasks = [...this.state.subtasks];
 
@@ -177,9 +182,8 @@ export class Main extends Component {
   //   });
   // };
 
-  onCheckedHandler = (id) => {
+  onCheckHandler = (id, idDecompose, rootTodo) => {
     const todos = [...this.state.todos];
-    const subtasks = [...this.state.subtasks];
 
     let todoCheck;
 
@@ -190,15 +194,28 @@ export class Main extends Component {
       }
     });
 
-    subtasks.map((subtask) => {
-      if (subtask.idTodo === id || subtask.id === id) {
-        subtask.done = todoCheck;
-      }
-    });
+    // subtasks.map((subtask) => {
+    //   if (subtask.idTodo === id || subtask.id === id) {
+    //     subtask.done = todoCheck;
+    //   }
+    // });
+
+    if (rootTodo.idCategory === 'Месяц') {
+      todos.map(todo => {
+        if (todo.idDecompose === idDecompose) {
+          todo.done = todoCheck
+        }
+      })
+    }
+
 
     todos.map((todo) => {
-      if (id === todo.idTodo) {
-        todo.done = todoCheck;
+      // if (idDecompose === todo.idDecompose && todo.isSubtask) {
+      //   todo.done = todoCheck;
+      //   console.log(idDecompose)
+      // } 
+      if (rootTodo.idCategory === todo.idCategory) {
+
       }
     });
     // let idForSubtask = []
@@ -235,13 +252,13 @@ export class Main extends Component {
     //   }
     // });
 
-    const filtred = todos.forEach((todo) => {
-      subtasks.forEach((subtask) => {
-        if (subtask.idTodo === todo.id) {
-          console.log('ID', todo.id);
-        }
-      });
-    });
+    // const filtred = todos.forEach((todo) => {
+    //   subtasks.forEach((subtask) => {
+    //     if (subtask.idTodo === todo.id) {
+    //       console.log('ID', todo.id);
+    //     }
+    //   });
+    // });
 
     // const filteredSubtasks = subtasks.filter(
     //   (subtask) => subtask.idTodo === id && subtask.done === false
@@ -265,8 +282,8 @@ export class Main extends Component {
 
     this.setState({
       todos,
-      subtasks,
     });
+    console.log(todos.map(todo => console.log(todo.text, todo.id, todo.idTodo)))
   };
 
   onClickSubtaskOpenHandler = (id) => {
@@ -279,30 +296,24 @@ export class Main extends Component {
     );
   };
 
-  onInputSubtaskHandler = (event, idTodo, idCategory, todo) => {
+  onInputSubtaskHandler = (event, idTodo, idCategory, idDecompose) => {
     if (event.key === 'Enter' && event.target.value) {
-      // const subtasks = [...this.state.subtasks];
       const todos = [...this.state.todos];
-      // let newIdTodo = null
-      console.log(todo);
+
       todos.map((todo) => {
         if (todo.id === idTodo) {
           todo.done = false;
         }
       });
 
-      console.log(idTodo, idCategory);
-
       todos.push({
         id: ID(),
-        idCategory,
+        idCategory, 
         text: event.target.value,
         done: false,
-        subtasksIsOpen: false,
         isSubtask: true,
-        idTodo,
-
-        // idDecompose: idTodo
+        idTodo, 
+        idDecompose
       });
 
       this.setState({
@@ -312,25 +323,27 @@ export class Main extends Component {
     }
   };
 
-  onClickDecomposeOnTodoHandler = (subtask) => {
+  onClickDecomposeTodoHandler = (subtask) => {
     const todos = [...this.state.todos];
     const todoCategory = [...this.state.todoCategory];
     const notes = [...this.state.notes];
 
-    const todo = todos.filter((todo) => todo.id === subtask.idTodo);
-    const index = todoCategory.indexOf(todo[0].idCategory);
+    const id = ID()
 
-    if (todos.find((todo) => todo.id === subtask.id)) {
-      alert('Данное значение уже добавлено');
-      return;
+    const todo = todos.find((todo) => todo.id === subtask.idTodo);
+    const index = todoCategory.indexOf(todo.idCategory);
+
+    if (todos.find((todo) => todo.id !== subtask.id)) {
+      return alert('Данное значение уже добавлено');
     } else {
       todos.push({
-        id: subtask.id,
+        id: ID(),
         idCategory: todoCategory[index - 1],
         text: subtask.text,
         done: subtask.done,
         subtasksIsOpen: false,
         idTodo: subtask.idTodo,
+        idDecompose: subtask.idDecompose
       });
       notes.push({ id: ID(), idTodo: subtask.id, text: '' });
     }
@@ -339,8 +352,6 @@ export class Main extends Component {
       todos,
       notes,
     });
-
-    // this.onClickDeleteSubtaskHandler(subtask.id);
   };
 
   onChangeNotesHandler = (event, id) => {
@@ -363,47 +374,43 @@ export class Main extends Component {
         <Todo
           todoName={this.state.todoCategory[0]}
           todos={this.state.todos}
-          // subtasks={this.state.subtasks}
           notes={this.state.notes}
           onClickTodo={this.onClickTodo}
           onChangeInput={this.onChangeInput}
           onInputTodo={this.onInputTodoHandler}
           onClickDelete={this.onClickDeleteHandler}
-          // onClickDeleteSubtask={this.onClickDeleteSubtaskHandler}
-          onChecked={this.onCheckedHandler}
+          onChecked={this.onCheckHandler}
           onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
           onInputSubtask={this.onInputSubtaskHandler}
-          onClickDecomposeOnTodo={this.onClickDecomposeOnTodoHandler}
+          onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
           onChangeNotes={this.onChangeNotesHandler}
         />
-        {/* <Todo
+        <Todo
           todoName={this.state.todoCategory[1]}
           todos={this.state.todos}
-          subtasks={this.state.subtasks}
           onClickTodo={this.onClickTodo}
           onChangeInput={this.onChangeInput}
-          onKeyEnter={this.onKeyEnter}
+          onInputTodo={this.onInputTodoHandler}
           onClickDelete={this.onClickDeleteHandler}
-          onClickDeleteSubtask={this.onClickDeleteSubtaskHandler}
-          onChecked={this.onCheckedHandler}
+          onChecked={this.onCheckHandler}
           onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
-          onKeyEnterSubtask={this.onKeyEnterSubtaskHandler}
-          onClickDecomposeOnTodo={this.onClickDecomposeOnTodoHandler}
+          onInputSubtask={this.onInputSubtaskHandler}
+          onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
+          onChangeNotes={this.onChangeNotesHandler}
         />
         <Todo
           todoName={this.state.todoCategory[2]}
           todos={this.state.todos}
-          subtasks={this.state.subtasks}
           onClickTodo={this.onClickTodo}
           onChangeInput={this.onChangeInput}
-          onKeyEnter={this.onKeyEnter}
+          onInputTodo={this.onInputTodoHandler}
           onClickDelete={this.onClickDeleteHandler}
-          onClickDeleteSubtask={this.onClickDeleteSubtaskHandler}
-          onChecked={this.onCheckedHandler}
+          onChecked={this.onCheckHandler}
           onClickSubtaskOpen={this.onClickSubtaskOpenHandler}
-          onKeyEnterSubtask={this.onKeyEnterSubtaskHandler}
-          onClickDecomposeOnTodo={this.onClickDecomposeOnTodoHandler}
-        /> */}
+          onInputSubtask={this.onInputSubtaskHandler}
+          onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
+          onChangeNotes={this.onChangeNotesHandler}
+        />
       </div>
     );
   }
