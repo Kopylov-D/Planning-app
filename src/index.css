@@ -14,7 +14,7 @@ code {
 }
 
 .header {
-  background: #311B92 ;
+  background: #311b92;
   padding: 5px;
   color: aliceblue;
 }
@@ -24,15 +24,13 @@ code {
   max-width: 500px;
   font-size: small;
   margin-bottom: 1rem;
-
 }
 
 .todo {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 3px;
-
+  padding: 0 0 0 5px;
 }
 
 .checkBox {
@@ -50,7 +48,7 @@ code {
   padding: 1rem;
 }
 
-@media (max-width: 992px) { 
+@media (max-width: 992px) {
   .main {
     /* max-width: 576px; */
     flex-direction: column;
@@ -59,23 +57,22 @@ code {
   .todolist {
     max-width: 800px;
   }
- }
+}
 
- @media (min-width: 992px) { 
+@media (min-width: 992px) {
   .main {
     /* max-width: 576px; */
     flex-direction: row;
-    justify-content: space-around
-
+    justify-content: space-around;
   }
   .todolist {
   }
- }
+}
 
 .sub {
   font-size: small;
-  padding: 1px 5px 1px 40px;
-  margin: 0;
+  padding: 1px 1px 0px 1px;
+  margin-left: 20px;
 }
 
 .sub button {
@@ -83,31 +80,46 @@ code {
   height: 22px;
   padding: 0;
   text-align: center;
-
 }
 
 .sub input {
-  /* width: 20px; */
-  padding:0 1rem 0;
-  margin: 0;
-
+  padding: 0 1rem 0;
   height: 20px;
-
 }
 
 .btn-toggle {
-  /* border-radius: 50%; */
+  border-radius: 50%;
   border: 1px solid rgb(0, 0, 0);
   padding: 0;
-  background:#fff;
+  background: #fff;
   margin-left: 5px;
   width: 10px;
   height: 10px;
 }
 
-.color {
-  
+.color-btn {
+  width: 20px;
 }
 
+.color-menu {
+  padding: 5px;
+  display: flex;
+  list-style-type: none;
+}
 
+.color.green {
+  background: #c8e6c9;
+}
+.color.orange {
+  background: #ffe0b2;
+}
+.color.indigo {
+  background: #c5cae9;
+}
 
+.color-item {
+  border-radius: 20%;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}

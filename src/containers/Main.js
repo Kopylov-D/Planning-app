@@ -17,6 +17,7 @@ export class Main extends Component {
         text: 'Задача 1',
         done: false,
         tasksIsOpen: true,
+        colorId: 1,
       },
       {
         id: 1,
@@ -24,6 +25,7 @@ export class Main extends Component {
         text: 'Задача 2',
         done: false,
         tasksIsOpen: true,
+        colorId: 2,
       },
       {
         id: 3,
@@ -31,6 +33,7 @@ export class Main extends Component {
         text: 'Задача 3',
         done: false,
         tasksIsOpen: true,
+        colorId: 3,
       },
       {
         id: 4,
@@ -38,6 +41,7 @@ export class Main extends Component {
         text: 'Задача 4',
         done: false,
         tasksIsOpen: true,
+        colorId: 1,
       },
     ],
     tasks: [
@@ -51,32 +55,33 @@ export class Main extends Component {
     notes: [{ id: 12323, idTodo: 0, text: 'Заметки по задаче' }],
     colors: [
       { id: 1, hex: '#81C784', name: 'green' },
-      { id: 1, hex: '#FF8A65', name: 'orange' },
-      { id: 1, hex: '#7986CB', name: 'indigo' },
+      { id: 2, hex: '#FF8A65', name: 'orange' },
+      { id: 3, hex: '#c5cae9', name: 'indigo' },
     ],
   };
 
   onClickTodo = () => {};
 
-  addTodo = (event, idCategory, idTodo, idDecompose) => {
+  addTodo = (event, category, colorId) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
+
       const id = ID();
-      console.log(idTodo);
+
+      if (category === 'День') {
+        notes.push({ id: ID(), idTodo: id, text: '' });
+      }
 
       todos.push({
         id: id,
-        idCategory,
+        category,
         text: event.target.value,
         done: false,
-        subtasksIsOpen: false,
+        tasksIsOpen: false,
         isSubtask: false,
-        idTodo: idTodo ? idTodo : id,
-        idDecompose: idDecompose ? idDecompose : id,
+        colorId,
       });
-
-      notes.push({ id: ID(), idTodo: id, text: '' });
 
       this.setState({
         todos,
@@ -86,81 +91,32 @@ export class Main extends Component {
     }
   };
 
-  onClickDeleteHandler = (id) => {
+  deleteTodoHandler = (id) => {
     let todos = [...this.state.todos];
+    let tasks = [...this.state.tasks];
 
     todos = todos.filter((item) => item.id !== id);
+    tasks = tasks.filter((item) => item.idTodo !== id);
 
     this.setState({
       todos,
+      tasks,
     });
   };
 
-  // onCheckHandler = (id) => {
-  //   const todos = [...this.state.todos];
-  //   const subtasks = [...this.state.subtasks];
+  deleteTaskHandler = (id) => {
+    let tasks = [...this.state.tasks];
 
-  //   let todoCheck;
-  //   // let idForSubtask = []
-  //   // subtasks.forEach(subtask => {
-  //   //   if (subtask.idTodo === id) {
-  //   //     idForSubtask.push(subtask.id)
-  //   //   }
-  //   // })
-  //   todos.map((todo) => {
-  //     if (todo.id === id) {
-  //       todo.done = !todo.done;
-  //       todoCheck = todo.done; //запомнить значение для subtask текущего todo
-  //     }
-  //     if (todo.idCompose === id) {
-  //       // console.log(todo.idCompose, id)
-  //       // todo.done = todoCheck;
-  //     }
-  //     if (todo.idCompose) {
-  //       console.log(todo.idCompose);
-  //       todo.done = todoCheck;
-  //     }
-  //   });
+    tasks = tasks.filter((item) => item.id !== id);
 
-  //   let parentId;
-  //   subtasks.map((subtask) => {
-  //     if (subtask.idTodo === id) {
-  //       subtask.done = todoCheck;
-  //     }
-  //     if (subtask.id === id) {
-  //       subtask.done = !subtask.done;
-  //       parentId = subtask.idTodo;
-  //     }
-  //     if (subtask.id === todoCheck) {
-  //     }
-  //   });
+    this.setState({
+      tasks,
+    });
+  };
 
-  //   const filteredSubtasks = subtasks.filter(
-  //     (subtask) => subtask.idTodo === parentId && !subtask.done
-  //   );
-
-  //   if (!filteredSubtasks.length) {
-  //     todos.map((todo) => {
-  //       if (todo.id === parentId) {
-  //         todo.done = true;
-  //       }
-  //     });
-  //   } else {
-  //     todos.map((todo) => {
-  //       if (todo.id === parentId) {
-  //         todo.done = false;
-  //       }
-  //     });
-  //   }
-
-  //   this.setState({
-  //     todos,
-  //     subtasks,
-  //   });
-  // };
-
-  onCheckHandler = (id, idDecompose, rootTodo) => {
+  checkHandler = (id, idDecompose, rootTodo) => {
     const todos = [...this.state.todos];
+    const tasks = [...this.state.tasks];
 
     let todoCheck;
 
@@ -171,28 +127,35 @@ export class Main extends Component {
       }
     });
 
-    // subtasks.map((subtask) => {
-    //   if (subtask.idTodo === id || subtask.id === id) {
-    //     subtask.done = todoCheck;
-    //   }
-    // });
-
-    if (rootTodo.idCategory === 'Месяц') {
-      todos.map((todo) => {
-        if (todo.idDecompose === idDecompose) {
-          todo.done = todoCheck;
+    function check(arr) {
+      arr.map((item) => {
+        if ((item.idTodo === id || item.id === id) && item.done !== todoCheck) {
+          item.done = todoCheck;
+          check(arr)
         }
       });
     }
 
-    todos.map((todo) => {
-      // if (idDecompose === todo.idDecompose && todo.isSubtask) {
-      //   todo.done = todoCheck;
-      //   console.log(idDecompose)
-      // }
-      if (rootTodo.idCategory === todo.idCategory) {
-      }
-    });
+    check(tasks)
+    check(todos)
+
+    function checkAllTask(arr) {
+      arr.map((item) => {
+        if ((item.idTodo === id || item.id === id) && item.done !== todoCheck) {
+          item.done = todoCheck;
+          check(arr)
+        }
+      });
+    }
+
+    // if (rootTodo.idCategory === 'Месяц') {
+    //   todos.map((todo) => {
+    //     if (todo.idDecompose === idDecompose) {
+    //       todo.done = todoCheck;
+    //     }
+    //   });
+    // }
+
     // let idForSubtask = []
     // subtasks.forEach(subtask => {
     //   if (subtask.idTodo === id) {
@@ -258,9 +221,6 @@ export class Main extends Component {
     this.setState({
       todos,
     });
-    console.log(
-      todos.map((todo) => console.log(todo.text, todo.id, todo.idTodo))
-    );
   };
 
   openTasksHandler = (id) => {
@@ -273,9 +233,10 @@ export class Main extends Component {
     );
   };
 
-  addTask = (event, idTodo, idCategory, idDecompose) => {
+  addTask = (event, idTodo) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
+      const tasks = [...this.state.tasks];
 
       todos.map((todo) => {
         if (todo.id === idTodo) {
@@ -283,46 +244,46 @@ export class Main extends Component {
         }
       });
 
-      todos.push({
+      tasks.push({
         id: ID(),
-        idCategory,
+        idTodo,
         text: event.target.value,
         done: false,
-        isSubtask: true,
-        idTodo,
-        idDecompose,
       });
 
       this.setState({
-        todos,
+        tasks,
       });
       event.target.value = '';
     }
   };
 
-  onClickDecomposeTodoHandler = (subtask) => {
+  decomposeTodoHandler = (task) => {
     const todos = [...this.state.todos];
     const todoCategory = [...this.state.todoCategory];
+    const tasks = [...this.state.tasks];
     const notes = [...this.state.notes];
 
-    const id = ID();
+    const todo = todos.find((todo) => todo.id === task.idTodo);
+    const index = todoCategory.indexOf(todo.category);
+    const newCategory = todoCategory[index - 1];
 
-    const todo = todos.find((todo) => todo.id === subtask.idTodo);
-    const index = todoCategory.indexOf(todo.idCategory);
-
-    if (todos.find((todo) => todo.id !== subtask.id)) {
+    if (todos.find((todo) => todo.id === task.id)) {
       return alert('Данное значение уже добавлено');
     } else {
       todos.push({
-        id: ID(),
-        idCategory: todoCategory[index - 1],
-        text: subtask.text,
-        done: subtask.done,
-        subtasksIsOpen: false,
-        idTodo: subtask.idTodo,
-        idDecompose: subtask.idDecompose,
+        id: task.id,
+        category: newCategory,
+        text: task.text,
+        done: task.done,
+        tasksIsOpen: false,
+        idTodo: task.idTodo,
+        colorId: todo.colorId,
       });
-      notes.push({ id: ID(), idTodo: subtask.id, text: '' });
+
+      if (newCategory === 'День') {
+        notes.push({ id: ID(), idTodo: task.id, text: '' });
+      }
     }
 
     this.setState({
@@ -331,7 +292,7 @@ export class Main extends Component {
     });
   };
 
-  onChangeNotesHandler = (event, id) => {
+  noteInputHandler = (event, id) => {
     const notes = [...this.state.notes];
 
     notes.map((note) => {
@@ -358,14 +319,14 @@ export class Main extends Component {
               notes={this.state.notes}
               colors={this.state.colors}
               onClickTodo={this.onClickTodo}
-              // addTodo={this.addTodo}
               addTodo={this.addTodo}
-              onClickDelete={this.onClickDeleteHandler}
-              onChecked={this.onCheckHandler}
+              deleteTodo={this.deleteTodoHandler}
+              deleteTask={this.deleteTaskHandler}
+              onChecked={this.checkHandler}
               openTasks={this.openTasksHandler}
               addTask={this.addTask}
-              onClickDecomposeTodo={this.onClickDecomposeTodoHandler}
-              onChangeNotes={this.onChangeNotesHandler}
+              decomposeTodo={this.decomposeTodoHandler}
+              noteInput={this.noteInputHandler}
             />
           );
         })}

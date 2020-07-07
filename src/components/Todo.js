@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Color from './Color';
 import TodoItem from './TodoItem';
 
 const Todo = (props) => {
+  const [colorMenu, setColorMenu] = useState(false);
+  const [lastColor, setLastColor] = useState({ id: 3, hex: '#7986CB', name: 'indigo' });
+
+  const colorMenuToggle = () => {
+    setColorMenu(!colorMenu);
+  };
+
+  const selectColor = (color) => {
+    setLastColor(color);
+    colorMenuToggle();
+  };
+
   return (
     <div className="todolist">
       <h5>{props.todoName}</h5>
@@ -15,41 +28,51 @@ const Todo = (props) => {
                 todoName={props.todoName}
                 tasks={props.tasks}
                 notes={props.notes}
-                colors={props.colors}
+                color={props.colors.find((color) => color.id === todo.colorId)}
                 onClickTodo={props.onClickTodo}
-                onClickDelete={props.onClickDelete}
+                deleteTodo={props.deleteTodo}
+                deleteTask={props.deleteTask}
                 addTask={props.addTask}
                 onChecked={props.onChecked}
                 openTasks={props.openTasks}
-                onClickDecomposeTodo={props.onClickDecomposeTodo}
-                onChangeNotes={props.onChangeNotes}
+                decomposeTodo={props.decomposeTodo}
+                noteInput={props.noteInput}
               />
             );
           }
         })}
       </ul>
-      <div className="input-group flex-nowrap">
-        <div className="input-group-prepend">
-          <select name="select">
-            <option value="value1">{props.colors[0].name}</option>
-            <option value="value2">{props.colors[1].name}</option>
-            <option value="value3">{props.colors[2].name}</option>
-          </select>
+
+      <div>
+        <div className="input-group flex-nowrap">
+          <div
+            className={`color-btn color ${lastColor.name}`}
+            // style={{ width: '25px', background: lastColor }}
+            onClick={colorMenuToggle}
+          ></div>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Новая задача"
+            onChange={props.onChangeInput}
+            onKeyDown={(event) =>
+              props.addTodo(event, props.todoName, lastColor.id)
+            }
+          />
         </div>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Новая задача"
-          onChange={props.onChangeInput}
-          onKeyDown={(event) =>
-            props.addTodo(
-              event,
-              props.todoName,
-              props.idTodo,
-              props.idDecompose
-            )
-          }
-        />
+        {colorMenu && (
+          <ul className="color-menu">
+            {props.colors.map((color) => {
+              return (
+                <Color
+                  key={color.id}
+                  color={color}
+                  onClick={selectColor}
+                />
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
