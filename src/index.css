@@ -123,3 +123,16 @@ code {
   height: 20px;
   margin-right: 5px;
 }
+
+.arrow {
+  position: absolute;
+  width: 5px;
+  height: 14px;
+  left: calc(50% - 5px/2 - 4.5px);
+  top: calc(50% - 14px/2 + 9.5px);
+  
+  background: #000000;
+  transform: rotate(-90deg);
+}
+
+
