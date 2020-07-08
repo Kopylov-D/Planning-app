@@ -23,9 +23,7 @@ const TodoItem = (props) => {
             type="checkbox"
             checked={props.todo.done}
             className="checkBox"
-            onChange={() =>
-              props.onChecked(props.todo.id)
-            }
+            onChange={() => props.onChecked(props.todo.id)}
           ></input>
           {props.todo.text}
           <button
@@ -81,7 +79,9 @@ const TodoItem = (props) => {
                   className="form-control sub"
                   placeholder="Новая подзадача"
                   onChange={props.onChangeInput}
-                  onKeyDown={(event) => props.addTask(event, props.todo.id)}
+                  onKeyDown={(event) =>
+                    props.addTask(event, props.todo.id, props.todo.parentId)
+                  }
                 />
               </div>
             </Fragment>

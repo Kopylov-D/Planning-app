@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import Todo from '../components/Todo';
-// import Context from './context';
-
-function ID() {
-  const randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-  return randLetter + Date.now();
-}
+import {setID, Observer, Subject} from '../functions/functions'
+ // import Context from './context';
 
 export class Main extends Component {
   state = {
@@ -16,7 +12,7 @@ export class Main extends Component {
         category: 'День',
         text: 'Задача 1',
         done: false,
-        tasksIsOpen: true,
+        tasksIsOpen: false,
         colorId: 1,
       },
       {
@@ -67,19 +63,19 @@ export class Main extends Component {
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
 
-      const id = ID();
+      const id = setID();
 
       if (category === 'День') {
-        notes.push({ id: ID(), idTodo: id, text: '' });
+        notes.push({ id: setID(), idTodo: id, text: '' });
       }
 
       todos.push({
         id: id,
+        parentId: setID(),
         category,
         text: event.target.value,
         done: false,
         tasksIsOpen: false,
-        isSubtask: false,
         colorId,
       });
 
@@ -122,8 +118,8 @@ export class Main extends Component {
 
     todos.map((todo) => {
       if (todo.id === id) {
-        todo.done = !todo.done;
-        return (todoCheck = todo.done);
+        todo.done = !todo.done
+        todoCheck = todo.done
       }
     });
 
@@ -131,22 +127,47 @@ export class Main extends Component {
       arr.map((item) => {
         if ((item.idTodo === id || item.id === id) && item.done !== todoCheck) {
           item.done = todoCheck;
-          check(arr)
+          check(arr);
         }
       });
     }
 
-    check(tasks)
-    check(todos)
+
+
+    check(tasks);
+    check(todos);
 
     function checkAllTask(arr) {
-      arr.map((item) => {
-        if ((item.idTodo === id || item.id === id) && item.done !== todoCheck) {
-          item.done = todoCheck;
-          check(arr)
-        }
-      });
+      const filteredTasks = arr.filter(
+        (item) => item.idTodo === id && item.done === false
+      );
+
+      if (!filteredTasks.length) {
+        todos.map((todo) => {
+          if (todo.id === id) {
+            todo.done = true;
+          }
+        });
+      } else {
+        todos.map((todo) => {
+          if (todo.id === id) {
+            todo.done = false;
+          }
+        });
+      }
+      // checkAllTask(arr)
     }
+
+    // todos.map(todo => {
+    //   tasks.forEach(task => {
+    //     if (task.idTodo === todo.id && task.done !== todo.done) {
+    //       todo.done = task.done
+    //     }
+    //   })
+    // })
+
+    // checkAllTask(tasks)
+    // checkAllTask(todos)
 
     // if (rootTodo.idCategory === 'Месяц') {
     //   todos.map((todo) => {
@@ -228,12 +249,12 @@ export class Main extends Component {
 
     this.setState(
       todos.map((todo) =>
-        todo.id === id ? (todo.tasksIsOpen = !todo.tasksIsOpen) : null
+        todo.id === id && (todo.tasksIsOpen = !todo.tasksIsOpen) 
       )
     );
   };
 
-  addTask = (event, idTodo) => {
+  addTask = (event, idTodo, parentId) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
       const tasks = [...this.state.tasks];
@@ -245,8 +266,9 @@ export class Main extends Component {
       });
 
       tasks.push({
-        id: ID(),
+        id: setID(),
         idTodo,
+        parentId,
         text: event.target.value,
         done: false,
       });
@@ -273,6 +295,7 @@ export class Main extends Component {
     } else {
       todos.push({
         id: task.id,
+        parentId: task.parentId,
         category: newCategory,
         text: task.text,
         done: task.done,
@@ -282,7 +305,7 @@ export class Main extends Component {
       });
 
       if (newCategory === 'День') {
-        notes.push({ id: ID(), idTodo: task.id, text: '' });
+        notes.push({ id: setID(), idTodo: task.id, text: '' });
       }
     }
 
