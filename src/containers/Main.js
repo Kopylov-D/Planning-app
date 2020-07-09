@@ -137,13 +137,6 @@ export class Main extends Component {
       }
     });
 
-    function checkParent(arr) {
-      arr.map((item) => {
-        if (item.parentId === id) {
-        }
-      });
-    }
-
     function check(arr) {
       arr.map((item) => {
         if ((item.idTodo === id || item.id === id) && item.done !== todoCheck) {
@@ -155,10 +148,6 @@ export class Main extends Component {
 
     check(tasks);
     check(todos);
-
-    const filteredTasks = tasks.filter((item) => item.id === id);
-
-    // console.log(filteredTasks)
 
     function checkAllTask(arr1, arr2) {
       const filtered = arr1.filter(
@@ -182,100 +171,37 @@ export class Main extends Component {
 
     checkAllTask(tasks, todos);
 
-    // for (let i = 0; i < todos.length; i++) {
-    //   for (let j = 0; j < tasks.length; i++) {
-    //     if (todos[i].)
-    //   }
-    // }
+    function findRelatives(arr1, arr2) {
+      const parentTodo = todos.find(
+        (todo) =>
+          todo.parentId === parentId &&
+          todo.categoryLevel === 3 &&
+          id === todo.id
+      );
+      if (parentTodo) {
+        arr1.map((item) =>
+          item.parentId === parentId ? (item.done = parentTodo.done) : null
+        );
+        arr2.map((item) =>
+          item.parentId === parentId ? (item.done = parentTodo.done) : null
+        );
+        checkAllTask(tasks, todos);
+      } else if (
+        todos.find(
+          (todo) =>
+            todo.parentId === parentId &&
+            todo.categoryLevel === 1 &&
+            id === todo.id
+        )
+      ) {
+        id = parentId;
+        const newTodo = arr1.find((item) => item.id === id);
+        parentId = newTodo.parentId;
+        checkAllTask(arr1, arr2);
+      }
+    }
 
-    const parentTodo = todos.filter((todo) => todo.parentId === parentId && todo.todoLevel == 3);
-    const parentTasks = tasks.filter((task) => task.parentId === parentId);
-
-    console.log('parentTodo', parentTodo);
-    console.log('parentTasks', parentTasks);
-
-    // checkAllTask(todos)
-
-    // todos.map(todo => {
-    //   tasks.forEach(task => {
-    //     if (task.idTodo === todo.id && task.done !== todo.done) {
-    //       todo.done = task.done
-    //     }
-    //   })
-    // })
-
-    // checkAllTask(tasks)
-    // checkAllTask(todos)
-
-    // if (rootTodo.idCategory === 3) {
-    //   todos.map((todo) => {
-    //     if (todo.idDecompose === idDecompose) {
-    //       todo.done = todoCheck;
-    //     }
-    //   });
-    // }
-
-    // let idForSubtask = []
-    // subtasks.forEach(subtask => {
-    //   if (subtask.idTodo === id) {
-    //     idForSubtask.push(subtask.id)
-    //   }
-    // })
-    // todos.map((todo) => {
-    //   if (todo.id === id) {
-    //     todo.done = !todo.done;
-    //     todoCheck = todo.done; //запомнить значение для subtask текущего todo
-    //   }
-    //   if (todo.idCompose === id) {
-    //     // console.log(todo.idCompose, id)
-    //     // todo.done = todoCheck;
-    //   }
-    //   if (todo.idCompose) {
-    //     console.log(todo.idCompose);
-    //     todo.done = todoCheck;
-    //   }
-    // });
-
-    // let parentId;
-    // subtasks.map((subtask) => {
-    //   if (subtask.idTodo === id) {
-    //     subtask.done = todoCheck;
-    //   }
-    //   if (subtask.id === id) {
-    //     subtask.done = !subtask.done;
-    //     parentId = subtask.idTodo;
-    //   }
-    //   if (subtask.id === todoCheck) {
-    //   }
-    // });
-
-    // const filtred = todos.forEach((todo) => {
-    //   subtasks.forEach((subtask) => {
-    //     if (subtask.idTodo === todo.id) {
-    //       console.log('ID', todo.id);
-    //     }
-    //   });
-    // });
-
-    // const filteredSubtasks = tasks.filter(
-    //   (task) => task.idTodo === idTodo && task.done === false
-    // );
-
-    // console.log(filteredSubtasks)
-
-    // if (!filteredSubtasks.length) {
-    //   todos.map((todo) => {
-    //     if (todo.id === idTodo) {
-    //       todo.done = true;
-    //     }
-    //   });
-    // } else {
-    //   todos.map((todo) => {
-    //     if (todo.id === idTodo) {
-    //       todo.done = false;
-    //     }
-    //   });
-    // }
+    findRelatives(todos, tasks);
 
     this.setState({
       todos,
