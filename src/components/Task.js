@@ -12,7 +12,6 @@ const Task = (props) => {
       // style={{ background: props.color }}
       className={`list-group-item todo sub color ${props.color}`}
     >
-      <div className='arrow'></div>
       <button
         type="button"
         className={'btn btn-primary btn-sm'}

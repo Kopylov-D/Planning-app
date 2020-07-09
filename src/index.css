@@ -97,6 +97,13 @@ code {
   height: 10px;
 }
 
+.counter{
+  font-weight: normal;
+  margin-left: 5px;
+  text-decoration: solid;
+
+}
+
 .color-btn {
   width: 20px;
 }

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Task from './Task';
 
 const TodoItem = (props) => {
-  const classes = ['todo'];
+  const classes = [];
 
   if (props.todo.done) {
     classes.push('done');
@@ -12,25 +12,43 @@ const TodoItem = (props) => {
     classes.push(props.className);
   }
 
+  const tasksNum = props.tasks.filter((task) => task.idTodo === props.todo.id)
+    .length;
+  const doneTasks = props.tasks.filter(
+    (task) => task.idTodo === props.todo.id && task.done
+  ).length;
+
   return (
     <Fragment>
       <li
         className={`list-group-item todo color ${props.color.name}`}
         onClick={() => props.onClickTodo(props.todo.id)}
       >
-        <div className={classes.join(' ')}>
+        <div className="todo">
           <input
             type="checkbox"
             checked={props.todo.done}
-            className="checkBox"
-            onChange={() => props.onChecked(props.todo.id)}
+            className="check-box"
+            onChange={() =>
+              props.onChecked(
+                props.todo.id,
+                props.todo.parentId,
+                props.todo.idTodo
+              )
+            }
           ></input>
-          {props.todo.text}
+          <div className={classes.join(' ')}>{props.todo.text}</div>
+
           <button
             type="button"
             className="btn-toggle"
             onClick={() => props.openTasks(props.todo.id)}
           ></button>
+          {props.todoLevel !== 1 && (
+            <div className="badge badge-primary text-wrap counter">
+              {doneTasks}/{tasksNum}
+            </div>
+          )}
         </div>
 
         <button
@@ -44,7 +62,7 @@ const TodoItem = (props) => {
 
       {props.todo.tasksIsOpen && (
         <ul className="list-group sub">
-          {props.todo.category === 'День' ? (
+          {props.todoLevel === 1 ? (
             props.notes.map((note) => {
               if (note.idTodo === props.todo.id) {
                 return (

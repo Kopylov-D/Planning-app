@@ -17,15 +17,15 @@ const Todo = (props) => {
 
   return (
     <div className="todolist">
-      <h5>{props.todoName}</h5>
+      <h5 className='text-center'>{props.todoName}</h5>
       <ul className="list-group">
         {props.todos.map((todo, index) => {
-          if (todo.category === props.todoName) {
+          if (todo.categoryLevel === props.todoLevel) {
             return (
               <TodoItem
                 key={index}
                 todo={todo}
-                todoName={props.todoName}
+                todoLevel={props.todoLevel}
                 tasks={props.tasks}
                 notes={props.notes}
                 color={props.colors.find((color) => color.id === todo.colorId)}
@@ -56,7 +56,7 @@ const Todo = (props) => {
             placeholder="Новая задача"
             onChange={props.onChangeInput}
             onKeyDown={(event) =>
-              props.addTodo(event, props.todoName, lastColor.id)
+              props.addTodo(event, props.todoLevel, lastColor.id)
             }
           />
         </div>

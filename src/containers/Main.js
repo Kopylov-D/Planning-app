@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import Todo from '../components/Todo';
-import {setID, Observer, Subject} from '../functions/functions'
- // import Context from './context';
+import { setID, Observer, Subject } from '../functions/functions';
+// import Context from './context';
 
 export class Main extends Component {
   state = {
-    todoCategory: ['День', 'Неделя', 'Месяц'],
+    todoCategory: [
+      { level: 1, name: 'День' },
+      { level: 2, name: 'Неделя' },
+      { level: 3, name: 'Месяц' },
+    ],
     todos: [
       {
         id: 0,
-        category: 'День',
+        categoryLevel: 1,
         text: 'Задача 1',
         done: false,
         tasksIsOpen: false,
@@ -17,7 +21,7 @@ export class Main extends Component {
       },
       {
         id: 1,
-        category: 'Неделя',
+        categoryLevel: 2,
         text: 'Задача 2',
         done: false,
         tasksIsOpen: true,
@@ -25,7 +29,7 @@ export class Main extends Component {
       },
       {
         id: 3,
-        category: 'Неделя',
+        categoryLevel: 2,
         text: 'Задача 3',
         done: false,
         tasksIsOpen: true,
@@ -33,7 +37,7 @@ export class Main extends Component {
       },
       {
         id: 4,
-        category: 'Месяц',
+        categoryLevel: 3,
         text: 'Задача 4',
         done: false,
         tasksIsOpen: true,
@@ -41,12 +45,12 @@ export class Main extends Component {
       },
     ],
     tasks: [
-      { id: 230, idTodo: 0, text: `Задача 1/1`, done: false },
-      { id: 123, idTodo: 0, text: `Задача 1/2`, done: false },
-      { id: 2434, idTodo: 1, text: `Задача 1/3`, done: false },
-      { id: 34545, idTodo: 2, text: `Задача 1/4`, done: false },
-      { id: 5656654, idTodo: 2, text: `Задача 1/5`, done: false },
-      { id: 56566542545, idTodo: 3, text: `Задача 1/5`, done: false },
+      { id: 10, idTodo: 0, text: `Задача 1/1`, done: false },
+      { id: 11, idTodo: 0, text: `Задача 1/2`, done: false },
+      { id: 12, idTodo: 1, text: `Задача 1/3`, done: false },
+      { id: 13, idTodo: 2, text: `Задача 1/4`, done: false },
+      { id: 14, idTodo: 2, text: `Задача 1/5`, done: false },
+      { id: 15, idTodo: 3, text: `Задача 1/5`, done: false },
     ],
     notes: [{ id: 12323, idTodo: 0, text: 'Заметки по задаче' }],
     colors: [
@@ -54,25 +58,34 @@ export class Main extends Component {
       { id: 2, hex: '#FF8A65', name: 'orange' },
       { id: 3, hex: '#c5cae9', name: 'indigo' },
     ],
+    observers: [],
+    subjects: [],
   };
 
   onClickTodo = () => {};
 
-  addTodo = (event, category, colorId) => {
+  addTodo = (event, categoryLevel, colorId) => {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
 
       const id = setID();
 
-      if (category === 'День') {
+      if (categoryLevel === 1) {
         notes.push({ id: setID(), idTodo: id, text: '' });
       }
 
+      const subjects = [...this.state.subjects];
+      subjects.push({
+        id,
+        sub: new Subject(),
+      });
+      // const stream$ = new Subject()
+
       todos.push({
         id: id,
-        parentId: setID(),
-        category,
+        parentId: id,
+        categoryLevel,
         text: event.target.value,
         done: false,
         tasksIsOpen: false,
@@ -82,6 +95,7 @@ export class Main extends Component {
       this.setState({
         todos,
         notes,
+        subjects,
       });
       event.target.value = '';
     }
@@ -110,7 +124,7 @@ export class Main extends Component {
     });
   };
 
-  checkHandler = (id, idDecompose, rootTodo) => {
+  checkHandler = (id, parentId, idTodo) => {
     const todos = [...this.state.todos];
     const tasks = [...this.state.tasks];
 
@@ -118,10 +132,17 @@ export class Main extends Component {
 
     todos.map((todo) => {
       if (todo.id === id) {
-        todo.done = !todo.done
-        todoCheck = todo.done
+        todo.done = !todo.done;
+        todoCheck = todo.done;
       }
     });
+
+    function checkParent(arr) {
+      arr.map((item) => {
+        if (item.parentId === id) {
+        }
+      });
+    }
 
     function check(arr) {
       arr.map((item) => {
@@ -132,31 +153,48 @@ export class Main extends Component {
       });
     }
 
-
-
     check(tasks);
     check(todos);
 
-    function checkAllTask(arr) {
-      const filteredTasks = arr.filter(
-        (item) => item.idTodo === id && item.done === false
+    const filteredTasks = tasks.filter((item) => item.id === id);
+
+    // console.log(filteredTasks)
+
+    function checkAllTask(arr1, arr2) {
+      const filtered = arr1.filter(
+        (item) => item.idTodo === idTodo && item.done === false
       );
 
-      if (!filteredTasks.length) {
-        todos.map((todo) => {
-          if (todo.id === id) {
+      if (!filtered.length) {
+        arr2.map((todo) => {
+          if (todo.id === idTodo) {
             todo.done = true;
           }
         });
       } else {
-        todos.map((todo) => {
-          if (todo.id === id) {
+        arr2.map((todo) => {
+          if (todo.id === idTodo) {
             todo.done = false;
           }
         });
       }
-      // checkAllTask(arr)
     }
+
+    checkAllTask(tasks, todos);
+
+    // for (let i = 0; i < todos.length; i++) {
+    //   for (let j = 0; j < tasks.length; i++) {
+    //     if (todos[i].)
+    //   }
+    // }
+
+    const parentTodo = todos.filter((todo) => todo.parentId === parentId && todo.todoLevel == 3);
+    const parentTasks = tasks.filter((task) => task.parentId === parentId);
+
+    console.log('parentTodo', parentTodo);
+    console.log('parentTasks', parentTasks);
+
+    // checkAllTask(todos)
 
     // todos.map(todo => {
     //   tasks.forEach(task => {
@@ -169,7 +207,7 @@ export class Main extends Component {
     // checkAllTask(tasks)
     // checkAllTask(todos)
 
-    // if (rootTodo.idCategory === 'Месяц') {
+    // if (rootTodo.idCategory === 3) {
     //   todos.map((todo) => {
     //     if (todo.idDecompose === idDecompose) {
     //       todo.done = todoCheck;
@@ -219,21 +257,21 @@ export class Main extends Component {
     //   });
     // });
 
-    // const filteredSubtasks = subtasks.filter(
-    //   (subtask) => subtask.idTodo === id && subtask.done === false
+    // const filteredSubtasks = tasks.filter(
+    //   (task) => task.idTodo === idTodo && task.done === false
     // );
 
     // console.log(filteredSubtasks)
 
     // if (!filteredSubtasks.length) {
     //   todos.map((todo) => {
-    //     if (todo.id === id) {
+    //     if (todo.id === idTodo) {
     //       todo.done = true;
     //     }
     //   });
     // } else {
     //   todos.map((todo) => {
-    //     if (todo.id === id) {
+    //     if (todo.id === idTodo) {
     //       todo.done = false;
     //     }
     //   });
@@ -248,8 +286,8 @@ export class Main extends Component {
     const todos = [...this.state.todos];
 
     this.setState(
-      todos.map((todo) =>
-        todo.id === id && (todo.tasksIsOpen = !todo.tasksIsOpen) 
+      todos.map(
+        (todo) => todo.id === id && (todo.tasksIsOpen = !todo.tasksIsOpen)
       )
     );
   };
@@ -258,6 +296,13 @@ export class Main extends Component {
     if (event.key === 'Enter' && event.target.value) {
       const todos = [...this.state.todos];
       const tasks = [...this.state.tasks];
+      const subjects = [...this.state.subjects];
+
+      // subjects.map(subject => {
+      //   if (subject.id === idTodo) {
+      //     subject.sub.subscribe(new Observer())
+      //   }
+      // })
 
       todos.map((todo) => {
         if (todo.id === idTodo) {
@@ -275,20 +320,20 @@ export class Main extends Component {
 
       this.setState({
         tasks,
+        subjects,
       });
       event.target.value = '';
+
+      console.log(this.state);
     }
   };
 
   decomposeTodoHandler = (task) => {
     const todos = [...this.state.todos];
-    const todoCategory = [...this.state.todoCategory];
-    const tasks = [...this.state.tasks];
     const notes = [...this.state.notes];
 
     const todo = todos.find((todo) => todo.id === task.idTodo);
-    const index = todoCategory.indexOf(todo.category);
-    const newCategory = todoCategory[index - 1];
+    const categoryLevel = todo.categoryLevel - 1;
 
     if (todos.find((todo) => todo.id === task.id)) {
       return alert('Данное значение уже добавлено');
@@ -296,7 +341,7 @@ export class Main extends Component {
       todos.push({
         id: task.id,
         parentId: task.parentId,
-        category: newCategory,
+        categoryLevel,
         text: task.text,
         done: task.done,
         tasksIsOpen: false,
@@ -304,7 +349,7 @@ export class Main extends Component {
         colorId: todo.colorId,
       });
 
-      if (newCategory === 'День') {
+      if (categoryLevel === 1) {
         notes.push({ id: setID(), idTodo: task.id, text: '' });
       }
     }
@@ -336,7 +381,7 @@ export class Main extends Component {
           return (
             <Todo
               key={index}
-              todoName={category}
+              todoLevel={category.level}
               todos={this.state.todos}
               tasks={this.state.tasks}
               notes={this.state.notes}
