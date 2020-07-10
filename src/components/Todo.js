@@ -20,7 +20,7 @@ const Todo = (props) => {
       <h5 className='text-center'>{props.todoName}</h5>
       <ul className="list-group">
         {props.todos.map((todo, index) => {
-          if (todo.categoryLevel === props.todoLevel) {
+          if (todo.todoLevel === props.todoLevel) {
             return (
               <TodoItem
                 key={index}

@@ -33,11 +33,12 @@ const TodoItem = (props) => {
               props.onChecked(
                 props.todo.id,
                 props.todo.parentId,
-                props.todo.idTodo
+                props.todo.idTodo, 
+                props.todo.todoLevel
               )
             }
           ></input>
-          <div className={classes.join(' ')}>{props.todo.text}</div>
+          <div className={`ml-2 ${classes.join(' ')}`}>{props.todo.text}</div>
 
           <button
             type="button"

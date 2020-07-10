@@ -6,7 +6,7 @@ import Header from './containers/Header';
 function App() {
   return (
     <div className={'container-fluid'}>
-      <Header/>
+      <Header />
       <Main />
     </div>
   );
