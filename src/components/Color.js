@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function Color(props) {
+export default function Color({color, onClick}) {
   return (
     <li
-      className={`color-item color ${props.color.name}`}
-      onClick={() => props.onClick(props.color)}
+      className={`color-item color ${color.name}`}
+      onClick={() => onClick(color)}
     ></li>
   );
 }

@@ -131,15 +131,19 @@ code {
   margin-right: 5px;
 }
 
-.arrow {
+.alert {
+  display: flex;
   position: absolute;
-  width: 5px;
-  height: 14px;
-  left: calc(50% - 5px/2 - 4.5px);
-  top: calc(50% - 14px/2 + 9.5px);
+  z-index: 1000;
+  opacity: 0.9;
   
-  background: #000000;
-  transform: rotate(-90deg);
 }
 
+.alert div:first-child {
+  margin-right: 20px;
+}
+
+.alert span {
+  cursor: pointer;
+}
 

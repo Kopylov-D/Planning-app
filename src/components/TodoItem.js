@@ -39,6 +39,7 @@ const TodoItem = (props) => {
             }
           ></input>
           <div className={`ml-2 ${classes.join(' ')}`}>{props.todo.text}</div>
+          <i className='fa fa-times-circle'/>
 
           <button
             type="button"

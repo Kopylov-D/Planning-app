@@ -6,7 +6,12 @@ import Alert from '../components/Alert';
 
 export class Main extends Component {
   state = {
-    alert: { text: 'Данное значение уже добавленно!', show: false },
+    alert: {
+      text: 'Задача уже добавлена!',
+      positonLeft: '',
+      positionTop: '',
+      show: false,
+    },
     todoCategory: [
       { level: 1, name: 'День' },
       { level: 2, name: 'Неделя' },
@@ -131,9 +136,9 @@ export class Main extends Component {
 
     notes: [],
     colors: [
-      { id: 1, hex: '#81C784', name: 'green' },
-      { id: 2, hex: '#FF8A65', name: 'orange' },
-      { id: 3, hex: '#c5cae9', name: 'indigo' },
+      { id: 1, hex: '#81C784', name: 'green', onUse: false },
+      { id: 2, hex: '#FF8A65', name: 'orange', onUse: false },
+      { id: 3, hex: '#c5cae9', name: 'indigo', onUse: true },
     ],
     observers: [],
     subjects: [],
@@ -186,8 +191,27 @@ export class Main extends Component {
     let todos = [...this.state.todos];
     let tasks = [...this.state.tasks];
 
-    todos = todos.filter((item) => item.id !== id);
-    tasks = tasks.filter((item) => item.idTodo !== id);
+    const currentTodo = todos.find((todo) => todo.id === id);
+    const parentId = currentTodo.parentId;
+    const todoLevel = currentTodo.todoLevel;
+
+    // if (todoLevel > 1) {
+    //   todos = todos.filter((todo) => {
+    //     if (todo.todoLevel > todoLevel) {
+    //       return true;
+    //     }
+    //     if (todo.parentId !== parentId) {
+    //       return true;
+    //     }
+    //   });
+    // }
+
+    if (todoLevel === 3) {
+      todos = todos.filter((todo) => todo.parentId !== parentId);
+    }
+
+    todos = todos.filter((todo) => todo.id !== id);
+    tasks = tasks.filter((task) => task.idTodo !== id);
 
     this.setState({
       todos,
@@ -426,7 +450,7 @@ export class Main extends Component {
     }
   };
 
-  decomposeTodoHandler = (task) => {
+  decomposeTodoHandler = (event, task) => {
     const todos = [...this.state.todos];
     const notes = [...this.state.notes];
 
@@ -435,10 +459,33 @@ export class Main extends Component {
 
     if (todos.find((todo) => todo.id === task.id)) {
       const alert = { ...this.state.alert };
+
+      // if (!alert.show) {
+      //   return new Promise((resolve, reject) => {
+      //     setTimeout(() => {
+      //       resolve();
+      //       reject();
+      //     }, 2000);
+      //   }).then(
+      //     () => {
+      //       alert.show = false;
+      //       this.setState({ alert });
+      //     },
+      //     () => null
+      //   );
+      // }
+
+      // if (alert.show) {
+      //   alert.show = false;
+      //   this.setState({ alert });
+      // }
+
+      alert.positionLeft = event.pageX;
+      alert.positionTop = event.pageY;
+
       alert.show = true;
+
       this.setState({ alert });
-      return;
-      
     } else {
       todos.push({
         id: task.id,
@@ -476,10 +523,16 @@ export class Main extends Component {
     });
   };
 
+  closeAlertHandler = () => {
+    const alert = { ...this.state.alert };
+    alert.show = false;
+    this.setState({ alert });
+  };
+
   render() {
     return (
       <Fragment>
-        <Alert alert={this.state.alert} />
+        <Alert alert={this.state.alert} closeAlert={this.closeAlertHandler} />
         <div className="main">
           {this.state.todoCategory.map((category, index) => {
             return (

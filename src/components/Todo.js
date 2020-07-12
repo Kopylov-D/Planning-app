@@ -11,6 +11,7 @@ const Todo = (props) => {
   };
 
   const selectColor = (color) => {
+    // color.onUse = true
     setLastColor(color);
     colorMenuToggle();
   };
@@ -60,16 +61,20 @@ const Todo = (props) => {
             }
           />
         </div>
+
         {colorMenu && (
           <ul className="color-menu">
             {props.colors.map((color) => {
-              return (
-                <Color
-                  key={color.id}
-                  color={color}
-                  onClick={selectColor}
-                />
-              );
+              // if (!color.onUse) {
+                return (
+                  <Color
+                    key={color.id}
+                    color={color}
+                    onClick={selectColor}
+                  />
+                );
+              // }
+            
             })}
           </ul>
         )}

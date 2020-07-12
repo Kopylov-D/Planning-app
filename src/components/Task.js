@@ -15,7 +15,7 @@ const Task = (props) => {
       <button
         type="button"
         className={'btn btn-primary btn-sm'}
-        onClick={() => props.decomposeTodo(props.task)}
+        onClick={(event) => props.decomposeTodo(event, props.task)}
       >
         +
       </button>
