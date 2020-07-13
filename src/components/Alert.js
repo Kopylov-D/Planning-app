@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-export default function Alert({ alert, closeAlert, type }) {
+export default function Alert({ alert, closeAlert}) {
   const style = {
     left: alert.positionLeft,
     top: alert.positionTop,
@@ -9,7 +9,10 @@ export default function Alert({ alert, closeAlert, type }) {
   return (
     <Fragment>
       {alert.show && (
-        <div className={`alert alert-${type || 'warning'} align-middle`} style={style}>
+        <div
+          className={`alert alert-${alert.type || 'warning'} align-middle`}
+          style={style}
+        >
           <div>{alert.text}</div>
           <span onClick={() => closeAlert()}>&times;</span>
         </div>

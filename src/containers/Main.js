@@ -7,7 +7,7 @@ import Alert from '../components/Alert';
 export class Main extends Component {
   state = {
     alert: {
-      text: 'Задача уже добавлена!',
+      text: '',
       positonLeft: '',
       positionTop: '',
       show: false,
@@ -416,6 +416,19 @@ export class Main extends Component {
 
   addTask = (event, idTodo, parentId) => {
     if (event.key === 'Enter' && event.target.value) {
+      if (event.target.value.length > 30) {
+        const alert = { ...this.state.alert };
+
+        alert.positionLeft = event.target.pageX;
+        alert.positionTop = event.pageY;
+
+        alert.show = true;
+        alert.type = 'danger';
+        alert.text = 'Длина задачи должна быть менее 30 символов!';
+
+        this.setState({ alert });
+        return;
+      }
       const todos = [...this.state.todos];
       const tasks = [...this.state.tasks];
       const subjects = [...this.state.subjects];
@@ -445,8 +458,6 @@ export class Main extends Component {
         subjects,
       });
       event.target.value = '';
-
-      console.log(this.state);
     }
   };
 
@@ -482,6 +493,8 @@ export class Main extends Component {
 
       alert.positionLeft = event.pageX;
       alert.positionTop = event.pageY;
+      alert.type = 'warning';
+      alert.text = 'Задача уже добавлена!';
 
       alert.show = true;
 
