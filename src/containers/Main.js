@@ -1,6 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import Todo from '../components/Todo';
-import { setID, Observer, Subject } from '../functions/functions';
+import {
+  setID,
+  Observer,
+  Subject,
+  checkInputLength,
+} from '../functions/functions';
 import Alert from '../components/Alert';
 // import Context from './context';
 
@@ -96,6 +101,7 @@ export class Main extends Component {
         parentId: 'P1594362794131',
         text: 'asdf',
         done: false,
+        todoLevel: 1,
       },
       {
         id: 'P1594362797202',
@@ -103,6 +109,7 @@ export class Main extends Component {
         parentId: 'P1594362794131',
         text: 'wqer',
         done: false,
+        todoLevel: 1,
       },
       {
         id: 'H1594362801513',
@@ -110,6 +117,7 @@ export class Main extends Component {
         parentId: 'P1594362794131',
         text: 'trju',
         done: false,
+        todoLevel: 2,
       },
       {
         id: 'J1594362802038',
@@ -117,6 +125,7 @@ export class Main extends Component {
         parentId: 'P1594362794131',
         text: 'po;p',
         done: false,
+        todoLevel: 2,
       },
       {
         id: 'O1594362805089',
@@ -124,6 +133,7 @@ export class Main extends Component {
         parentId: 'P1594362794131',
         text: 'saf',
         done: false,
+        todoLevel: 2,
       },
       {
         id: 'A1594362805565',
@@ -131,6 +141,7 @@ export class Main extends Component {
         parentId: 'P1594362794131',
         text: 'k',
         done: false,
+        todoLevel: 2,
       },
     ],
 
@@ -151,6 +162,22 @@ export class Main extends Component {
 
   addTodo = (event, todoLevel, colorId) => {
     if (event.key === 'Enter' && event.target.value) {
+      const alert = { ...this.state.alert };
+
+      if (event.target.value.length > 20) {
+        // Метод elem.getBoundingClientRect() возвращает координаты в контексте окна
+        // для минимального по размеру прямоугольника, который заключает в себе элемент elem,
+        // в виде объекта встроенного класса DOMRect
+        alert.positionLeft = event.target.getBoundingClientRect().x;
+        alert.positionTop = event.target.getBoundingClientRect().bottom;
+
+        alert.show = true;
+        alert.type = 'danger';
+        alert.text = 'Длина задачи должна быть менее 20 символов!';
+
+        this.setState({ alert });
+        return;
+      }
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
 
@@ -178,9 +205,12 @@ export class Main extends Component {
         colorId,
       });
 
+      alert.show = false;
+
       this.setState({
         todos,
         notes,
+        alert,
         subjects,
       });
       event.target.value = '';
@@ -243,32 +273,28 @@ export class Main extends Component {
     });
 
     function searchRelatives() {
-      // switch (todoLevel) {
-      //   case 3:
-      //     searchChilds();
-      //     break
-      //   case 2:
-      //     searchParents();
-      //     searchChilds();
-      //   case 1:
-      //     searchParents();
-      //   default:
-      //     return;
-      // }
-
       const todo = todos.find((todo) => todo.id === id);
 
-      if (todo.idTodo) {
+      if (todoLevel < 3) {
         searchParents();
-        searchChilds();
+        // searchChilds();
       }
-      if (!todo.idTodo) {
-        searchChilds();
-      }
+      // if (!todo.idTodo) {
+      //   searchChilds();
+      // }
     }
-
+    const arrId = [];
+    let i = 0
     function searchChilds() {
-      let arr = [];
+      
+      if (!arrId.length) {
+        todos.forEach((todo) => {
+          if (todo.parentId == parentId) {
+            arrId.push({id: todo.id, todoLevel: todo.todoLevel});
+          }
+        });
+      }
+
       if (todoLevel > 1) {
         todos.map((todo) => {
           if (todo.id === id) {
@@ -276,12 +302,14 @@ export class Main extends Component {
             tasks.map((task) => {
               if (task.idTodo === id) {
                 task.done = todoCheck;
-                arr.push(task.id);
               }
             });
           }
         });
-        console.log(arr);
+        i++
+        id = arrId[i].id
+        todoLevel = arrId[i].todoLevel
+        searchChilds();
       }
       // tasks.map((task) => {
       //   if (task.parentId === parentId) {
@@ -291,32 +319,36 @@ export class Main extends Component {
     }
 
     function searchParents() {
-      tasks.map((task) => (task.id === id ? (task.done = todoCheck) : null));
-      const filteredTasks = tasks.filter(
-        (task) => task.idTodo === idTodo && task.done === todoCheck
-      );
+      if (idTodo) {
+        tasks.map((task) => (task.id === id ? (task.done = todoCheck) : null));
+        const filteredTasks = tasks.filter(
+          (task) => task.idTodo === idTodo && task.done === false
+        );
+        console.log(filteredTasks);
 
-      if (!filteredTasks.length) {
-        todos.map((todo) => {
-          if (todo.id === idTodo) {
-            todo.done = true;
+        if (!filteredTasks.length) {
+          todos.map((todo) => {
+            if (todo.id === idTodo) {
+              todo.done = true;
+            }
+          });
+          id = idTodo;
+          idTodo = todos.find((todo) => todo.id === id).idTodo;
+          if (idTodo) {
+            searchParents();
           }
-        });
-        id = idTodo;
-        idTodo = todos.find((todo) => todo.id === id).idTodo;
-        if (idTodo) {
-          searchParents();
+        } else {
+          todos.map((todo) => {
+            if (todo.id === idTodo) {
+              todo.done = false;
+            }
+          });
         }
-      } else {
-        todos.map((todo) => {
-          if (todo.id === idTodo) {
-            todo.done = false;
-          }
-        });
       }
     }
 
-    searchRelatives();
+    searchParents();
+    searchChilds();
 
     this.setState({
       todos,
@@ -416,15 +448,18 @@ export class Main extends Component {
 
   addTask = (event, idTodo, parentId) => {
     if (event.key === 'Enter' && event.target.value) {
-      if (event.target.value.length > 30) {
-        const alert = { ...this.state.alert };
+      const alert = { ...this.state.alert };
 
-        alert.positionLeft = event.target.pageX;
-        alert.positionTop = event.pageY;
+      if (event.target.value.length > 20) {
+        // Метод elem.getBoundingClientRect() возвращает координаты в контексте окна
+        // для минимального по размеру прямоугольника, который заключает в себе элемент elem,
+        // в виде объекта встроенного класса DOMRect
+        alert.positionLeft = event.target.getBoundingClientRect().x;
+        alert.positionTop = event.target.getBoundingClientRect().bottom;
 
         alert.show = true;
         alert.type = 'danger';
-        alert.text = 'Длина задачи должна быть менее 30 символов!';
+        alert.text = 'Длина задачи должна быть менее 20 символов!';
 
         this.setState({ alert });
         return;
@@ -453,9 +488,12 @@ export class Main extends Component {
         done: false,
       });
 
+      alert.show = false;
+
       this.setState({
         tasks,
         subjects,
+        alert,
       });
       event.target.value = '';
     }
