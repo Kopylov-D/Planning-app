@@ -1,11 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Todo from '../components/Todo';
-import {
-  setID,
-  Observer,
-  Subject,
-  checkInputLength,
-} from '../functions/functions';
+import { setID, Observer, Subject, checkInputLength } from '../functions/functions';
 import Alert from '../components/Alert';
 // import Context from './context';
 
@@ -272,6 +267,85 @@ export class Main extends Component {
       }
     });
 
+    function filter() {
+      let filtered = tasks.filter(
+        (task) => task.idTodo === idTodo && task.done === false
+      );
+
+      if (!filtered.length) {
+        todos.map((todo) => {
+          if (todo.id === idTodo) {
+            todo.done = true;
+          }
+        });
+      } else {
+        todos.map((todo) => {
+          if (todo.id === idTodo) {
+            todo.done = false;
+          }
+        });
+      }
+    }
+
+    if (todoLevel === 1) {
+      let task = tasks.find((task) => task.id === id);
+      tasks.map((task) => (task.id === id ? (task.done = todoCheck) : null));
+      idTodo = task.idTodo;
+
+      filter();
+
+      let todo = todos.find((todo) => todo.id === idTodo);
+      id = todo.id;
+      idTodo = todo.idTodo;
+      todoCheck = todo.done;
+
+      tasks.map((task) => (task.id === id ? (task.done = todoCheck) : null));
+
+      filter();
+    }
+
+    if (todoLevel === 2) {
+      tasks.map((task) => {
+        if (task.idTodo === id) {
+          task.done = todoCheck;
+          todos.map((todo) => {
+            if (todo.id === task.id) {
+              todo.done = todoCheck;
+            }
+          });
+        }
+      });
+
+      tasks.map((task) => (task.id === id ? (task.done = todoCheck) : null));
+      todos.map((todo) => (todo.id == idTodo ? (todo.done = todoCheck) : null));
+
+      filter();
+    }
+
+    if (todoLevel === 3) {
+      todos.map((todo) => (todo.parentId === parentId ? (todo.done = todoCheck) : null));
+      tasks.map((task) => (task.parentId === parentId ? (task.done = todoCheck) : null));
+    }
+
+    this.setState({
+      todos,
+      tasks,
+    });
+  };
+
+  checkHandler2 = (id, parentId, idTodo, todoLevel) => {
+    const todos = [...this.state.todos];
+    const tasks = [...this.state.tasks];
+
+    let todoCheck;
+
+    todos.map((todo) => {
+      if (todo.id === id) {
+        todo.done = !todo.done;
+        todoCheck = todo.done;
+      }
+    });
+
     function searchRelatives() {
       const todo = todos.find((todo) => todo.id === id);
 
@@ -284,18 +358,18 @@ export class Main extends Component {
       // }
     }
     const arrId = [];
-    let i = 0
-    function searchChilds() {
-      
-      if (!arrId.length) {
-        todos.forEach((todo) => {
-          if (todo.parentId == parentId) {
-            arrId.push({id: todo.id, todoLevel: todo.todoLevel});
-          }
-        });
-      }
+    let i = 0;
 
-      if (todoLevel > 1) {
+    todos.forEach((todo) => {
+      if (todo.parentId == parentId && todo.idTodo == idTodo) {
+        arrId.push({ id: todo.id, todoLevel: todo.todoLevel });
+      }
+    });
+
+    console.log(arrId);
+
+    function searchChilds() {
+      if (i < arrId.length) {
         todos.map((todo) => {
           if (todo.id === id) {
             todo.done = todoCheck;
@@ -306,11 +380,14 @@ export class Main extends Component {
             });
           }
         });
-        i++
-        id = arrId[i].id
-        todoLevel = arrId[i].todoLevel
+
+        console.log(i);
+
+        id = arrId[i].id;
+        todoLevel = arrId[i].todoLevel;
+        i++;
         searchChilds();
-      }
+      } else return;
       // tasks.map((task) => {
       //   if (task.parentId === parentId) {
       //     task.done = todoCheck;
@@ -324,7 +401,6 @@ export class Main extends Component {
         const filteredTasks = tasks.filter(
           (task) => task.idTodo === idTodo && task.done === false
         );
-        console.log(filteredTasks);
 
         if (!filteredTasks.length) {
           todos.map((todo) => {
@@ -405,8 +481,7 @@ export class Main extends Component {
 
     function findRelatives(arr1, arr2) {
       const parentTodo = todos.find(
-        (todo) =>
-          todo.parentId === parentId && todo.todoLevel === 3 && id === todo.id
+        (todo) => todo.parentId === parentId && todo.todoLevel === 3 && id === todo.id
       );
       if (parentTodo) {
         arr1.map((item) =>
@@ -418,8 +493,7 @@ export class Main extends Component {
         checkAllTask(tasks, todos);
       } else if (
         todos.find(
-          (todo) =>
-            todo.parentId === parentId && todo.todoLevel === 1 && id === todo.id
+          (todo) => todo.parentId === parentId && todo.todoLevel === 1 && id === todo.id
         )
       ) {
         id = parentId;
@@ -440,9 +514,7 @@ export class Main extends Component {
     const todos = [...this.state.todos];
 
     this.setState(
-      todos.map(
-        (todo) => todo.id === id && (todo.tasksIsOpen = !todo.tasksIsOpen)
-      )
+      todos.map((todo) => todo.id === id && (todo.tasksIsOpen = !todo.tasksIsOpen))
     );
   };
 
