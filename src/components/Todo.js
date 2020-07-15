@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Color from './Color';
 import TodoItem from './TodoItem';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const Todo = (props) => {
   const [colorMenu, setColorMenu] = useState(false);
@@ -16,12 +17,14 @@ const Todo = (props) => {
   };
 
   return (
+    // <TransitionGroup className="todolist">
     <div className="todolist">
-      <h5 className='text-center'>{props.todoName}</h5>
+      <h5 className="text-center m-1">{props.todoName}</h5>
       <ul className="list-group">
         {props.todos.map((todo, index) => {
           if (todo.todoLevel === props.todoLevel) {
             return (
+              // <CSSTransition key={index} classNames={'todo'} timeout={5000}>
               <TodoItem
                 key={index}
                 todo={todo}
@@ -38,6 +41,7 @@ const Todo = (props) => {
                 decomposeTodo={props.decomposeTodo}
                 noteInput={props.noteInput}
               />
+              // </CSSTransition>
             );
           }
         })}
@@ -55,27 +59,20 @@ const Todo = (props) => {
             className="form-control"
             placeholder="Новая задача"
             onChange={props.onChangeInput}
-            onKeyDown={(event) =>
-              props.addTodo(event, props.todoLevel, lastColor.id)
-            }
+            onKeyDown={(event) => props.addTodo(event, props.todoLevel, lastColor.id)}
           />
         </div>
 
         {colorMenu && (
           <ul className="color-menu">
             {props.colors.map((color) => {
-                return (
-                  <Color
-                    key={color.id}
-                    color={color}
-                    onClick={selectColor}
-                  />
-                );
+              return <Color key={color.id} color={color} onClick={selectColor} />;
             })}
           </ul>
         )}
       </div>
     </div>
+    // </TransitionGroup>
   );
 };
 

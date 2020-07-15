@@ -1,22 +1,27 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { CSSTransition } from 'react-transition-group';
 
-export default function Alert({ alert, closeAlert}) {
+export default function Alert({ alert, closeAlert }) {
   const style = {
     left: alert.positionLeft,
     top: alert.positionTop,
   };
 
   return (
-    <Fragment>
-      {alert.show && (
-        <div
-          className={`alert alert-${alert.type || 'warning'} align-middle`}
-          style={style}
-        >
-          <div>{alert.text}</div>
-          <span onClick={() => closeAlert()}>&times;</span>
-        </div>
-      )}
-    </Fragment>
+    <CSSTransition
+      in={alert.show}
+      timeout={{ enter: 350, exit: 500 }}
+      classNames={'alert'}
+      mountOnEnter
+      unmountOnExit
+    >
+      <div
+        className={`alert alert-${alert.type || 'warning'} align-middle`}
+        style={style}
+      >
+        <div>{alert.text}</div>
+        <span onClick={() => closeAlert()}>&times;</span>
+      </div>
+    </CSSTransition>
   );
 }

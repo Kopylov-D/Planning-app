@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import Task from './Task';
+import { CSSTransition } from 'react-transition-group';
 
 const TodoItem = (props) => {
   const classes = [];
@@ -12,55 +13,53 @@ const TodoItem = (props) => {
     classes.push(props.className);
   }
 
-  const tasksNum = props.tasks.filter((task) => task.idTodo === props.todo.id)
-    .length;
+  const tasksNum = props.tasks.filter((task) => task.idTodo === props.todo.id).length;
   const doneTasks = props.tasks.filter(
     (task) => task.idTodo === props.todo.id && task.done
   ).length;
 
   return (
     <Fragment>
-      <li
-        className={`list-group-item todo color ${props.color.name}`}
-        onClick={() => props.onClickTodo(props.todo.id)}
-      >
-        <div className="todo">
-          <input
-            type="checkbox"
-            checked={props.todo.done}
-            className="check-box"
-            onChange={() =>
-              props.onChecked(
-                props.todo.id,
-                props.todo.parentId,
-                props.todo.idTodo, 
-                props.todo.todoLevel
-              )
-            }
-          ></input>
-          <div className={`ml-2 ${classes.join(' ')}`}>{props.todo.text}</div>
-          <i className='fa fa-times-circle'/>
+        <li
+          className={`list-group-item todo color ${props.color.name}`}
+          onClick={() => props.onClickTodo(props.todo.id)}
+        >
+          <div className="todo">
+            <input
+              type="checkbox"
+              checked={props.todo.done}
+              className="check-box"
+              onChange={() =>
+                props.onChecked(
+                  props.todo.id,
+                  props.todo.parentId,
+                  props.todo.idTodo,
+                  props.todo.todoLevel
+                )
+              }
+            ></input>
+            <div className={`ml-2 ${classes.join(' ')}`}>{props.todo.text}</div>
+
+            <button
+              type="button"
+              className="btn-toggle"
+              onClick={() => props.openTasks(props.todo.id)}
+            ></button>
+            {props.todoLevel !== 1 && (
+              <div className="badge badge-primary text-wrap counter">
+                {doneTasks}/{tasksNum}
+              </div>
+            )}
+          </div>
 
           <button
             type="button"
-            className="btn-toggle"
-            onClick={() => props.openTasks(props.todo.id)}
-          ></button>
-          {props.todoLevel !== 1 && (
-            <div className="badge badge-primary text-wrap counter">
-              {doneTasks}/{tasksNum}
-            </div>
-          )}
-        </div>
-
-        <button
-          type="button"
-          className="btn btn-danger btn-sm"
-          onClick={() => props.deleteTodo(props.todo.id)}
-        >
-          &times;
-        </button>
-      </li>
+            className="btn btn-danger btn-sm"
+            onClick={() => props.deleteTodo(props.todo.id)}
+          >
+            &times;
+          </button>
+        </li>
 
       {props.todo.tasksIsOpen && (
         <ul className="list-group sub">

@@ -1,16 +1,14 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .header {
@@ -19,8 +17,30 @@ code {
   color: aliceblue;
 }
 
+.targets {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  justify-content: space-around;
+}
+
+.targets li {
+  padding-left: 10px;
+}
+
+.backdrop {
+  z-index: 100;
+  background: rgba(0, 0, 0, .6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 .todolist {
-  min-width: 240px;
+  min-width: 290px;
   max-width: 500px;
   font-size: small;
   margin-bottom: 1rem;
@@ -44,13 +64,11 @@ code {
 .main {
   display: flex;
   justify-content: space-between;
-  /* background: #D1C4E9; */
   padding: 1rem;
 }
 
 @media (max-width: 992px) {
   .main {
-    /* max-width: 576px; */
     flex-direction: column-reverse;
     align-items: center;
   }
@@ -61,7 +79,6 @@ code {
 
 @media (min-width: 992px) {
   .main {
-    /* max-width: 576px; */
     flex-direction: row;
     justify-content: space-around;
   }
@@ -97,11 +114,9 @@ code {
   height: 10px;
 }
 
-.counter{
+.counter {
   font-weight: normal;
   margin-left: 5px;
-  text-decoration: solid;
-
 }
 
 .color-btn {
@@ -136,7 +151,6 @@ code {
   position: absolute;
   z-index: 1000;
   opacity: 0.9;
-  
 }
 
 .alert div:first-child {
@@ -147,3 +161,36 @@ code {
   cursor: pointer;
 }
 
+.alert-enter {
+  opacity: 0;
+}
+
+.alert-enter-active {
+  transition: opacity 350ms ease-in-out;
+  opacity: 0.9;
+}
+
+.alert-exit-active {
+  transition: opacity 500ms ease-out;
+  opacity: 0;
+}
+
+.todos-exit-active {
+  animation: todos 5000ms ease-out forwards;
+}
+
+@keyframes todos {
+  0% {
+    transform: translateX(0);
+  }
+
+  30% {
+    opacity: 0.7;
+    transform: translateX(30px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+}
