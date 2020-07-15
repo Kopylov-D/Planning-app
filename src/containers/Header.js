@@ -9,10 +9,12 @@ const Header = () => {
   ]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const onCloseModalHandler = () => {};
+  const onCloseModalHandler = () => {
+    setModalIsOpen(!modalIsOpen)
+  };
 
   function changeTarget() {
-    console.log('target');
+    setModalIsOpen(!modalIsOpen)
   }
   return (
     <div className="header rounded">

@@ -373,7 +373,6 @@ export class Main extends Component {
       alert.text = 'Задача уже добавлена!';
 
       alert.show = true;
-
     } else {
       todos.push({
         id: task.id,
@@ -394,7 +393,7 @@ export class Main extends Component {
     this.setState({
       todos,
       notes,
-      alert
+      alert,
     });
   };
 

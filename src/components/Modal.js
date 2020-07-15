@@ -2,14 +2,15 @@ import React from 'react';
 import BackDrop from './BackDrop';
 
 export default function Modal(props) {
-
   const onClickBackdrop = () => {
-    props.onCloseModal()
-  } 
+    props.onCloseModal();
+  };
+
   return (
     <div>
-      <div className="modal fade show" style={{ display: 'block' }} role="dialog">
-        <div className="modal-dialog" role="document">
+      <BackDrop onClick={onClickBackdrop} />
+      <div className="modal fade show" style={{ display: 'inline-block' }} data-backdrop="">
+        <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Modal title</h5>
@@ -36,7 +37,6 @@ export default function Modal(props) {
           </div>
         </div>
       </div>
-      <BackDrop onClick={onClickBackdrop}/>
     </div>
   );
 }
