@@ -5,7 +5,7 @@ export default function Alert({ alert, closeAlert }) {
   const style = {
     left: alert.positionLeft,
     top: alert.positionTop,
-  };
+  }
 
   return (
     <CSSTransition
@@ -19,7 +19,7 @@ export default function Alert({ alert, closeAlert }) {
         className={`alert alert-${alert.type || 'warning'} align-middle`}
         style={style}
       >
-        <div>{alert.text}</div>
+        <div>{alert.text || 'warning'}</div>
         <span onClick={() => closeAlert()}>&times;</span>
       </div>
     </CSSTransition>

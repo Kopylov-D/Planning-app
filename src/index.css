@@ -12,6 +12,7 @@ code {
 }
 
 .header {
+  /* background: #311b92; */
   background: #311b92;
   padding: 5px;
   color: aliceblue;
@@ -27,11 +28,18 @@ code {
 
 .targets li {
   padding-left: 10px;
+  display: flex;
+  /* background: #6200ea; */
+  cursor: pointer;
+}
+
+.targets li div {
+  padding-right: 5px;
 }
 
 .backdrop {
   z-index: 1000;
-  background: rgba(0, 0, 0, .6);
+  background: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
   left: 0;
@@ -43,7 +51,8 @@ code {
   min-width: 290px;
   max-width: 500px;
   font-size: small;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
+  z-index: 1;
 }
 
 .todo {
@@ -51,6 +60,7 @@ code {
   justify-content: space-between;
   align-items: center;
   padding: 0 0 0 5px;
+  z-index: 1;
 }
 
 .checkBox {
@@ -65,9 +75,15 @@ code {
   display: flex;
   justify-content: space-between;
   padding: 1rem;
+  z-index: 1;
 }
 
 @media (max-width: 992px) {
+  .targets {
+    flex-direction: column;
+    align-items: center;
+
+  }
   .main {
     flex-direction: column-reverse;
     align-items: center;
@@ -81,8 +97,6 @@ code {
   .main {
     flex-direction: row;
     justify-content: space-around;
-  }
-  .todolist {
   }
 }
 
@@ -149,7 +163,7 @@ code {
 .alert {
   display: flex;
   position: absolute;
-  z-index: 1000;
+  z-index: 1200;
   opacity: 0.9;
 }
 
@@ -193,4 +207,18 @@ code {
     opacity: 0;
     transform: translateX(-200px);
   }
+}
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-enter-active {
+  transition: opacity 500ms ease-in-out;
+  opacity: 1;
+}
+
+.modal-exit-active {
+  transition: opacity 500ms ease-out;
+  opacity: 0;
 }
