@@ -5,7 +5,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const Todo = (props) => {
   const [colorMenu, setColorMenu] = useState(false);
-  const [lastColor, setLastColor] = useState({ id: 3, hex: '#7986CB', name: 'indigo' });
+  const [lastColor, setLastColor] = useState({ id: 3, name: 'indigo' });
 
   const colorMenuToggle = () => {
     setColorMenu(!colorMenu);
@@ -63,13 +63,19 @@ const Todo = (props) => {
           />
         </div>
 
-        {colorMenu && (
+        <CSSTransition
+          in={colorMenu}
+          classNames={'color-menu'}
+          timeout={500}
+          mountOnEnter
+          unmountOnExit
+        >
           <ul className="color-menu">
             {props.colors.map((color) => {
               return <Color key={color.id} color={color} onClick={selectColor} />;
             })}
           </ul>
-        )}
+        </CSSTransition>
       </div>
     </div>
     // </TransitionGroup>

@@ -5,7 +5,7 @@ import Header from './containers/Header';
 
 function App() {
   return (
-    <div className={'container-fluid'}>
+    <div className={'container-sm'}>
       <Header />
       <Main />
     </div>

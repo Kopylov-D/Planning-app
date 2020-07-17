@@ -145,6 +145,10 @@ export class Main extends Component {
       { id: 1, hex: '#81C784', name: 'green', onUse: false },
       { id: 2, hex: '#FF8A65', name: 'orange', onUse: false },
       { id: 3, hex: '#c5cae9', name: 'indigo', onUse: true },
+      { id: 4, hex: '#e1bee7', name: 'purple', onUse: true },
+      { id: 5, hex: '#baddf9', name: 'blue', onUse: true },
+      { id: 6, hex: '#ffcdd2', name: 'red', onUse: true },
+      { id: 7, hex: '#fff9c4', name: 'yellow', onUse: true },
     ],
   };
 

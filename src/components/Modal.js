@@ -8,7 +8,7 @@ export default function Modal(props) {
 
   return (
     <div>
-      <BackDrop onClick={onClose} />
+      {/* <BackDrop onClick={onClose} /> */}
       <div className="modal fade show" style={{ display: 'block' }}>
         <div className="modal-dialog">
           <div className="modal-content">
@@ -32,10 +32,10 @@ export default function Modal(props) {
                 onClick={() => props.submitTarget()}
                 disabled={props.disabled}
               >
-                Save changes
+                Сохранить
               </button>
               <button type="button" className="btn btn-secondary" onClick={onClose}>
-                Close
+                Отмена
               </button>
             </div>
           </div>

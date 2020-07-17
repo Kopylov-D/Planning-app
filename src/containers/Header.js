@@ -64,7 +64,7 @@ const Header = () => {
           return (
             <Fragment>
               <li key={t.id} onClick={() => changeTarget(t.id)}>
-                <div>{t.value}</div>
+                <div >{t.value}</div>
                 <img src={gear} />
               </li>
             </Fragment>
