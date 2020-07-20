@@ -164,7 +164,7 @@ export class Main extends Component {
 
       Object.keys(response.data).forEach((key) => {
         // todos.push({ ...response.data[key], id: key});
-        todos.push({ ...response.data[key], key});
+        todos.push({ ...response.data[key], key });
       });
 
       this.setState({ todos });
@@ -199,10 +199,11 @@ export class Main extends Component {
       const id = setID();
 
       if (todoLevel === 1) {
-        notes.push({ id: setID(), idTodo: id, text: '' });
+        const noteObj = { id: setID(), idTodo: id, text: '' }
+        notes.push(noteObj);
 
         try {
-          await axios.put('https://planning-9eeda.firebaseio.com/main/notes.json', notes);
+          await axios.post('https://planning-9eeda.firebaseio.com/main/notes.json', noteObj);
           this.setState({ notes });
           event.target.value = '';
         } catch (e) {
@@ -237,10 +238,7 @@ export class Main extends Component {
       alert.show = false;
 
       try {
-        await axios.post(
-          'https://planning-9eeda.firebaseio.com/main/todos.json',
-          obj
-        );
+        await axios.post('https://planning-9eeda.firebaseio.com/main/todos.json', obj);
         this.setState({ todos });
       } catch (e) {
         console.log(e);
@@ -261,27 +259,27 @@ export class Main extends Component {
     if (todoLevel === 3) {
       todos = todos.filter((todo) => todo.parentId !== parentId);
       try {
-       const res = await axios.delete(`https://planning-9eeda.firebaseio.com/main/todos.json`, todos)
-       console.log(res)
-        this.setState({todos})
-      } catch(e) {
-        console.error(e)
+        const res = await axios.post(
+          `https://planning-9eeda.firebaseio.com/main/todos.json`,
+          // {...todos}
+          {...todos}
+        );
+        console.log(res);
+        this.setState({ todos });
+      } catch (e) {
+        console.error(e);
       }
-      
     }
-
 
     todos = todos.filter((todo) => todo.id !== id);
 
     try {
-      await axios.delete(`https://planning-9eeda.firebaseio.com/main/todos/${key}.json`)
-      this.setState({todos})
-
-    } catch(e) {
-      console.error(e)
+      await axios.delete(`https://planning-9eeda.firebaseio.com/main/todos/${key}.json`);
+      this.setState({ todos });
+    } catch (e) {
+      console.error(e);
     }
 
-  
     tasks = tasks.filter((task) => task.idTodo !== id);
 
     this.setState({
