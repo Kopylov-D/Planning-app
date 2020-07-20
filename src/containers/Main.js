@@ -1,7 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
+
 import Todo from '../components/Todo';
 import { setID } from '../functions/functions';
 import Alert from '../components/Alert';
+
 // import Context from './context';
 
 export class Main extends Component {
@@ -152,12 +155,30 @@ export class Main extends Component {
     ],
   };
 
+  async componentDidMount() {
+    try {
+      const response = await axios.get(
+        'https://planning-9eeda.firebaseio.com/main/todos.json'
+      );
+      const todos = [];
+
+      Object.keys(response.data).forEach((key) => {
+        // todos.push({ ...response.data[key], id: key});
+        todos.push({ ...response.data[key], key});
+      });
+
+      this.setState({ todos });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   onClickTodo = () => {
     // console.log(this.state.todos);
     // console.log(this.state.tasks);
   };
 
-  addTodo = (event, todoLevel, colorId) => {
+  addTodo = async (event, todoLevel, colorId) => {
     if (event.key === 'Enter' && event.target.value) {
       const alert = { ...this.state.alert };
 
@@ -179,30 +200,57 @@ export class Main extends Component {
 
       if (todoLevel === 1) {
         notes.push({ id: setID(), idTodo: id, text: '' });
+
+        try {
+          await axios.put('https://planning-9eeda.firebaseio.com/main/notes.json', notes);
+          this.setState({ notes });
+          event.target.value = '';
+        } catch (e) {
+          console.log(e);
+        }
       }
 
-      todos.push({
+      const obj = {
         id: id,
         parentId: id,
         todoLevel,
-        text: event.target.value,
+        text: event.target.value || 'empty',
         done: false,
         tasksIsOpen: false,
         colorId,
-      });
+      };
+
+      todos.push(obj);
+
+      // todos.push({
+      //   id: id,
+      //   // parentId: id,
+      //   todoLevel,
+      //   text: event.target.value || 'empty',
+      //   done: false,
+      //   tasksIsOpen: false,
+      //   colorId,
+      // });
+
+      // event.target.value = '';
 
       alert.show = false;
 
-      this.setState({
-        todos,
-        notes,
-        alert,
-      });
-      event.target.value = '';
+      try {
+        await axios.post(
+          'https://planning-9eeda.firebaseio.com/main/todos.json',
+          obj
+        );
+        this.setState({ todos });
+      } catch (e) {
+        console.log(e);
+      }
+
+      this.setState({ alert });
     }
   };
 
-  deleteTodoHandler = (id) => {
+  deleteTodoHandler = async (id, key) => {
     let todos = [...this.state.todos];
     let tasks = [...this.state.tasks];
 
@@ -212,13 +260,31 @@ export class Main extends Component {
 
     if (todoLevel === 3) {
       todos = todos.filter((todo) => todo.parentId !== parentId);
+      try {
+       const res = await axios.delete(`https://planning-9eeda.firebaseio.com/main/todos.json`, todos)
+       console.log(res)
+        this.setState({todos})
+      } catch(e) {
+        console.error(e)
+      }
+      
     }
 
+
     todos = todos.filter((todo) => todo.id !== id);
+
+    try {
+      await axios.delete(`https://planning-9eeda.firebaseio.com/main/todos/${key}.json`)
+      this.setState({todos})
+
+    } catch(e) {
+      console.error(e)
+    }
+
+  
     tasks = tasks.filter((task) => task.idTodo !== id);
 
     this.setState({
-      todos,
       tasks,
     });
   };

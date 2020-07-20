@@ -55,7 +55,7 @@ const TodoItem = (props) => {
           <button
             type="button"
             className="btn btn-danger btn-sm"
-            onClick={() => props.deleteTodo(props.todo.id)}
+            onClick={() => props.deleteTodo(props.todo.id, props.todo.key)}
           >
             &times;
           </button>
