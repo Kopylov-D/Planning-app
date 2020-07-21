@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Color from './Color';
 import TodoItem from './TodoItem';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import {CSSTransition } from 'react-transition-group';
 
 const Todo = (props) => {
   const [colorMenu, setColorMenu] = useState(false);

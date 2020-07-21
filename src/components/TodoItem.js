@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
+
 import Task from './Task';
-import { CSSTransition } from 'react-transition-group';
 
 const TodoItem = (props) => {
   const classes = [];

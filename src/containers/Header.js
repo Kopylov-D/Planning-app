@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
+import axios from '../axios/axios';
 
 import Modal from '../components/Modal';
 import Alert from '../components/Alert';
@@ -22,6 +23,15 @@ const Header = () => {
     positionTop: '',
     show: false,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get('https://planning-9eeda.firebaseio.com/header.json');
+      setTarget(result.data);
+    }
+
+    fetchData()
+  }, []);
 
   function changeTarget(id) {
     setModalIsOpen(true);
@@ -49,10 +59,16 @@ const Header = () => {
     }
   };
 
-  const submitTargetHandler = () => {
+  const submitTargetHandler = async () => {
     let newtarget = { id: currentId, value: currentValue };
     target.splice(currentId, 1, newtarget);
-    setTarget(target);
+    try {
+      await axios.put('https://planning-9eeda.firebaseio.com/header.json', target);
+      setTarget(target);
+    } catch (e) {
+      console.log(e);
+    }
+
     setModalIsOpen(false);
   };
 
@@ -64,8 +80,8 @@ const Header = () => {
           return (
             <Fragment>
               <li key={t.id} onClick={() => changeTarget(t.id)}>
-                <div >{t.value}</div>
-                <img src={gear} />
+                <div>{t.value}</div>
+                <img src={gear} alt="лого"/>
               </li>
             </Fragment>
           );

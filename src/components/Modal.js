@@ -1,5 +1,5 @@
 import React from 'react';
-import BackDrop from './BackDrop';
+// import BackDrop from './BackDrop';
 
 export default function Modal(props) {
   const onClose = () => {

@@ -1,11 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import axios from 'axios';
+import axios from '../axios/axios';
 
 import Todo from '../components/Todo';
 import { setID } from '../functions/functions';
 import Alert from '../components/Alert';
-
-// import Context from './context';
 
 export class Main extends Component {
   state = {
@@ -20,129 +18,8 @@ export class Main extends Component {
       { level: 2, name: 'Неделя' },
       { level: 3, name: 'Месяц' },
     ],
-    todos: [
-      {
-        colorId: 3,
-        done: false,
-        id: 'P1594362794131',
-        // idTodo: 'P1594362794131',
-        parentId: 'P1594362794131',
-        tasksIsOpen: true,
-        text: 'eqfwe',
-        todoLevel: 3,
-      },
-      {
-        colorId: 3,
-        done: false,
-        id: 'M1594362796586',
-        idTodo: 'P1594362794131',
-        parentId: 'P1594362794131',
-        tasksIsOpen: true,
-        text: 'asdf',
-        todoLevel: 2,
-      },
-      {
-        colorId: 3,
-        done: false,
-        id: 'P1594362797202',
-        idTodo: 'P1594362794131',
-        parentId: 'P1594362794131',
-        tasksIsOpen: true,
-        text: 'wqer',
-        todoLevel: 2,
-      },
-      {
-        colorId: 3,
-        done: false,
-        id: 'O1594362805089',
-        idTodo: 'P1594362797202',
-        parentId: 'P1594362794131',
-        tasksIsOpen: false,
-        text: 'saf',
-        todoLevel: 1,
-      },
-      {
-        colorId: 3,
-        done: false,
-        id: 'A1594362805565',
-        idTodo: 'P1594362797202',
-        parentId: 'P1594362794131',
-        tasksIsOpen: false,
-        text: 'k',
-        todoLevel: 1,
-      },
-      {
-        colorId: 3,
-        done: false,
-        id: 'H1594362801513',
-        idTodo: 'M1594362796586',
-        parentId: 'P1594362794131',
-        tasksIsOpen: false,
-        text: 'trju',
-        todoLevel: 1,
-      },
-      {
-        colorId: 3,
-        done: false,
-        id: 'J1594362802038',
-        idTodo: 'M1594362796586',
-        parentId: 'P1594362794131',
-        tasksIsOpen: false,
-        text: 'po;p',
-        todoLevel: 1,
-      },
-    ],
-    tasks: [
-      {
-        id: 'M1594362796586',
-        idTodo: 'P1594362794131',
-        parentId: 'P1594362794131',
-        text: 'asdf',
-        done: false,
-        todoLevel: 1,
-      },
-      {
-        id: 'P1594362797202',
-        idTodo: 'P1594362794131',
-        parentId: 'P1594362794131',
-        text: 'wqer',
-        done: false,
-        todoLevel: 1,
-      },
-      {
-        id: 'H1594362801513',
-        idTodo: 'M1594362796586',
-        parentId: 'P1594362794131',
-        text: 'trju',
-        done: false,
-        todoLevel: 2,
-      },
-      {
-        id: 'J1594362802038',
-        idTodo: 'M1594362796586',
-        parentId: 'P1594362794131',
-        text: 'po;p',
-        done: false,
-        todoLevel: 2,
-      },
-      {
-        id: 'O1594362805089',
-        idTodo: 'P1594362797202',
-        parentId: 'P1594362794131',
-        text: 'saf',
-        done: false,
-        todoLevel: 2,
-      },
-      {
-        id: 'A1594362805565',
-        idTodo: 'P1594362797202',
-        parentId: 'P1594362794131',
-        text: 'k',
-        done: false,
-        todoLevel: 2,
-      },
-    ],
-
+    todos: [],
+    tasks: [],
     notes: [],
     colors: [
       { id: 1, hex: '#81C784', name: 'green', onUse: false },
@@ -157,25 +34,20 @@ export class Main extends Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get(
-        'https://planning-9eeda.firebaseio.com/main/todos.json'
-      );
-      const todos = [];
+      const response = await axios.get('/main.json');
 
-      Object.keys(response.data).forEach((key) => {
-        // todos.push({ ...response.data[key], id: key});
-        todos.push({ ...response.data[key], key });
-      });
+      console.log(response.data)
 
-      this.setState({ todos });
+      if (response.data.todos && response.data.tasks && response.data.notes) {
+        this.setState(response.data);
+      }
     } catch (e) {
       console.log(e);
     }
   }
 
   onClickTodo = () => {
-    // console.log(this.state.todos);
-    // console.log(this.state.tasks);
+    console.log(this.state)
   };
 
   addTodo = async (event, todoLevel, colorId) => {
@@ -199,23 +71,15 @@ export class Main extends Component {
       const id = setID();
 
       if (todoLevel === 1) {
-        const noteObj = { id: setID(), idTodo: id, text: '' }
+        const noteObj = { id: setID(), idTodo: id, text: '' };
         notes.push(noteObj);
-
-        try {
-          await axios.post('https://planning-9eeda.firebaseio.com/main/notes.json', noteObj);
-          this.setState({ notes });
-          event.target.value = '';
-        } catch (e) {
-          console.log(e);
-        }
       }
 
       const obj = {
         id: id,
         parentId: id,
         todoLevel,
-        text: event.target.value || 'empty',
+        text: event.target.value,
         done: false,
         tasksIsOpen: false,
         colorId,
@@ -223,23 +87,19 @@ export class Main extends Component {
 
       todos.push(obj);
 
-      // todos.push({
-      //   id: id,
-      //   // parentId: id,
-      //   todoLevel,
-      //   text: event.target.value || 'empty',
-      //   done: false,
-      //   tasksIsOpen: false,
-      //   colorId,
-      // });
-
-      // event.target.value = '';
-
+      event.target.value = ''
       alert.show = false;
 
       try {
-        await axios.post('https://planning-9eeda.firebaseio.com/main/todos.json', obj);
+        await axios.put('/main/todos.json', todos);
         this.setState({ todos });
+      } catch (e) {
+        console.log(e);
+      }
+
+      try {
+        await axios.put('/main/notes.json', notes);
+        this.setState({ notes });
       } catch (e) {
         console.log(e);
       }
@@ -248,7 +108,7 @@ export class Main extends Component {
     }
   };
 
-  deleteTodoHandler = async (id, key) => {
+  deleteTodoHandler = async (id) => {
     let todos = [...this.state.todos];
     let tasks = [...this.state.tasks];
 
@@ -258,13 +118,10 @@ export class Main extends Component {
 
     if (todoLevel === 3) {
       todos = todos.filter((todo) => todo.parentId !== parentId);
+
       try {
-        const res = await axios.post(
-          `https://planning-9eeda.firebaseio.com/main/todos.json`,
-          // {...todos}
-          {...todos}
-        );
-        console.log(res);
+        await axios.put(`/main/todos.json`, todos);
+
         this.setState({ todos });
       } catch (e) {
         console.error(e);
@@ -272,32 +129,37 @@ export class Main extends Component {
     }
 
     todos = todos.filter((todo) => todo.id !== id);
+    tasks = tasks.filter((task) => task.idTodo !== id);
 
     try {
-      await axios.delete(`https://planning-9eeda.firebaseio.com/main/todos/${key}.json`);
+      await axios.put(`/main/todos.json`, todos);
       this.setState({ todos });
     } catch (e) {
       console.error(e);
     }
 
-    tasks = tasks.filter((task) => task.idTodo !== id);
-
-    this.setState({
-      tasks,
-    });
+    try {
+      await axios.put(`/main/tasks.json`, tasks);
+      this.setState({ tasks });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  deleteTaskHandler = (id) => {
+  deleteTaskHandler = async (id) => {
     let tasks = [...this.state.tasks];
 
     tasks = tasks.filter((item) => item.id !== id);
 
-    this.setState({
-      tasks,
-    });
+    try {
+      await axios.put(`/main/tasks.json`, tasks);
+      this.setState({ tasks });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  checkHandler = (id, parentId, idTodo, todoLevel) => {
+  checkHandler = async (id, parentId, idTodo, todoLevel) => {
     const todos = [...this.state.todos];
     const tasks = [...this.state.tasks];
 
@@ -370,21 +232,40 @@ export class Main extends Component {
       tasks.map((task) => (task.parentId === parentId ? (task.done = todoCheck) : null));
     }
 
-    this.setState({
-      todos,
-      tasks,
-    });
+    try {
+      await axios.put(`https://planning-9eeda.firebaseio.com/main/todos.json`, todos);
+      this.setState({ todos });
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      await axios.put(`https://planning-9eeda.firebaseio.com/main/tasks.json`, tasks);
+      this.setState({ tasks });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  openTasksHandler = (id) => {
+  openTasksHandler = async (id) => {
     const todos = [...this.state.todos];
+    if (todos.find((t) => t.id === id).todoLevel === 1) {
+      const notes = [...this.state.notes];
+
+      try {
+        await axios.put('/main/notes.json', notes);
+        this.setState({ notes });
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     this.setState(
       todos.map((todo) => todo.id === id && (todo.tasksIsOpen = !todo.tasksIsOpen))
     );
   };
 
-  addTask = (event, idTodo, parentId) => {
+  addTask = async (event, idTodo, parentId) => {
     if (event.key === 'Enter' && event.target.value) {
       const alert = { ...this.state.alert };
 
@@ -416,17 +297,23 @@ export class Main extends Component {
         done: false,
       });
 
+      event.target.value = ''
       alert.show = false;
 
+      try {
+        await axios.put(`/main/tasks.json`, tasks);
+        this.setState({ tasks });
+      } catch (e) {
+        console.error(e);
+      }
+
       this.setState({
-        tasks,
         alert,
       });
-      event.target.value = '';
     }
   };
 
-  decomposeTodoHandler = (event, task) => {
+  decomposeTodoHandler = async (event, task) => {
     const todos = [...this.state.todos];
     const notes = [...this.state.notes];
     const alert = { ...this.state.alert };
@@ -441,6 +328,7 @@ export class Main extends Component {
       alert.text = 'Задача уже добавлена!';
 
       alert.show = true;
+      this.setState({ alert });
     } else {
       todos.push({
         id: task.id,
@@ -458,14 +346,22 @@ export class Main extends Component {
       }
     }
 
-    this.setState({
-      todos,
-      notes,
-      alert,
-    });
+    try {
+      await axios.put(`/main/todos.json`, todos);
+      this.setState({ todos });
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      await axios.put(`/main/notes.json`, notes);
+      this.setState({ notes });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  noteInputHandler = (event, id) => {
+  noteInputHandler = async (event, id) => {
     const notes = [...this.state.notes];
 
     notes.map((note) => {
@@ -474,9 +370,7 @@ export class Main extends Component {
       }
     });
 
-    this.setState({
-      notes,
-    });
+    this.setState({ notes });
   };
 
   closeAlertHandler = () => {
@@ -484,6 +378,30 @@ export class Main extends Component {
     alert.show = false;
     this.setState({ alert });
   };
+
+  // axiosPut = async (item, itemName) => {
+  //   try {
+  //     await axios.put(
+  //       `https://planning-9eeda.firebaseio.com/main/${itemName}.json`,
+  //       item
+  //     );
+  //     console.log(item);
+  //     this.setState({ item });
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
+
+  // onClickQuery = async () => {
+  //   try {
+  //     const res = await axios.put(
+  //       'https://planning-9eeda.firebaseio.com/main/todoCategory.json',
+  //       this.state.todoCategory
+  //     );
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   render() {
     return (
@@ -513,6 +431,7 @@ export class Main extends Component {
             );
           })}
         </div>
+        <button onClick={this.onClickQuery}>query</button>
       </Fragment>
     );
   }
