@@ -17,14 +17,12 @@ const Todo = (props) => {
   };
 
   return (
-    // <TransitionGroup className="todolist">
     <div className="todolist">
       <h5 className="text-center m-1">{props.todoName}</h5>
       <ul className="list-group">
         {props.todos.map((todo, index) => {
           if (todo.todoLevel === props.todoLevel) {
             return (
-              // <CSSTransition key={index} classNames={'todo'} timeout={5000}>
               <TodoItem
                 key={index}
                 todo={todo}
@@ -41,7 +39,6 @@ const Todo = (props) => {
                 decomposeTodo={props.decomposeTodo}
                 noteInput={props.noteInput}
               />
-              // </CSSTransition>
             );
           }
         })}
@@ -51,7 +48,6 @@ const Todo = (props) => {
         <div className="input-group flex-nowrap">
           <div
             className={`color-btn color ${lastColor.name}`}
-            // style={{ width: '25px', background: lastColor }}
             onClick={colorMenuToggle}
           ></div>
           <input
@@ -78,7 +74,6 @@ const Todo = (props) => {
         </CSSTransition>
       </div>
     </div>
-    // </TransitionGroup>
   );
 };
 

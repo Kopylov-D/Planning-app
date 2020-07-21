@@ -233,14 +233,14 @@ export class Main extends Component {
     }
 
     try {
-      await axios.put(`https://planning-9eeda.firebaseio.com/main/todos.json`, todos);
+      await axios.put(`/main/todos.json`, todos);
       this.setState({ todos });
     } catch (e) {
       console.error(e);
     }
 
     try {
-      await axios.put(`https://planning-9eeda.firebaseio.com/main/tasks.json`, tasks);
+      await axios.put(`/main/tasks.json`, tasks);
       this.setState({ tasks });
     } catch (e) {
       console.error(e);
@@ -379,30 +379,6 @@ export class Main extends Component {
     this.setState({ alert });
   };
 
-  // axiosPut = async (item, itemName) => {
-  //   try {
-  //     await axios.put(
-  //       `https://planning-9eeda.firebaseio.com/main/${itemName}.json`,
-  //       item
-  //     );
-  //     console.log(item);
-  //     this.setState({ item });
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  // onClickQuery = async () => {
-  //   try {
-  //     const res = await axios.put(
-  //       'https://planning-9eeda.firebaseio.com/main/todoCategory.json',
-  //       this.state.todoCategory
-  //     );
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   render() {
     return (
       <Fragment>
@@ -431,7 +407,6 @@ export class Main extends Component {
             );
           })}
         </div>
-        <button onClick={this.onClickQuery}>query</button>
       </Fragment>
     );
   }

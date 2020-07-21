@@ -9,7 +9,6 @@ const Task = (props) => {
 
   return (
     <li
-      // style={{ background: props.color }}
       className={`list-group-item todo sub color ${props.color}`}
     >
       <button

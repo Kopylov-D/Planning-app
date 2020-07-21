@@ -26,7 +26,7 @@ const Header = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('https://planning-9eeda.firebaseio.com/header.json');
+      const result = await axios.get('/header.json', target);
       setTarget(result.data);
     }
 
@@ -63,7 +63,7 @@ const Header = () => {
     let newtarget = { id: currentId, value: currentValue };
     target.splice(currentId, 1, newtarget);
     try {
-      await axios.put('https://planning-9eeda.firebaseio.com/header.json', target);
+      await axios.put('/header.json', target);
       setTarget(target);
     } catch (e) {
       console.log(e);

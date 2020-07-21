@@ -1,5 +1,4 @@
 import React from 'react';
-// import BackDrop from './BackDrop';
 
 export default function Modal(props) {
   const onClose = () => {
@@ -8,7 +7,6 @@ export default function Modal(props) {
 
   return (
     <div>
-      {/* <BackDrop onClick={onClose} /> */}
       <div className="modal fade show" style={{ display: 'block' }}>
         <div className="modal-dialog">
           <div className="modal-content">
