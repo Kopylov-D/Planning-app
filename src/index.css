@@ -12,7 +12,6 @@ code {
 }
 
 .header {
-  /* background: #311b92; */
   background: #311b92;
   padding: 5px;
   color: aliceblue;
@@ -30,6 +29,8 @@ code {
   padding-left: 10px;
   display: flex;
   cursor: pointer;
+  text-align: center;
+  align-items: baseline;
 }
 
 .targets li div {
@@ -37,7 +38,6 @@ code {
 }
 
 .backdrop {
-  /* z-index: 1000; */
   background: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
@@ -62,6 +62,10 @@ code {
   z-index: 3;
 }
 
+.arrow {
+  padding-left: 3px;
+}
+ 
 .checkBox {
   margin-right: 20px;
 }
@@ -81,12 +85,17 @@ code {
   .targets {
     flex-direction: column;
     align-items: center;
-
   }
+
   .main {
     flex-direction: column-reverse;
     align-items: center;
   }
+
+  .sub i {
+    transform: rotate(-90deg);
+  }
+  
   .todolist {
     max-width: 800px;
   }
@@ -109,7 +118,9 @@ code {
   width: 22px;
   height: 22px;
   padding: 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sub input {
@@ -117,15 +128,6 @@ code {
   height: 20px;
 }
 
-.btn-toggle {
-  border-radius: 50%;
-  border: 1px solid rgb(0, 0, 0);
-  padding: 0;
-  background: #fff;
-  margin-left: 5px;
-  width: 10px;
-  height: 10px;
-}
 
 .counter {
   font-weight: normal;
@@ -133,7 +135,12 @@ code {
 }
 
 .color-btn {
-  width: 20px;
+  width: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
 
 .color-menu {
@@ -242,20 +249,6 @@ code {
   z-index: 2000;
 
 }
-
-/* .modal-enter {
-  opacity: 0;
-}
-
-.modal-enter-active {
-  transition: opacity 500ms ease-in-out;
-  opacity: 1;
-}
-
-.modal-exit-active {
-  transition: opacity 500ms ease-out;
-  opacity: 0;
-} */
 
 .color-menu-enter {
   opacity: 0;

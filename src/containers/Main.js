@@ -22,13 +22,13 @@ export class Main extends Component {
     tasks: [],
     notes: [],
     colors: [
-      { id: 1, hex: '#81C784', name: 'green', onUse: false },
-      { id: 2, hex: '#FF8A65', name: 'orange', onUse: false },
-      { id: 3, hex: '#c5cae9', name: 'indigo', onUse: true },
-      { id: 4, hex: '#e1bee7', name: 'purple', onUse: true },
-      { id: 5, hex: '#baddf9', name: 'blue', onUse: true },
-      { id: 6, hex: '#ffcdd2', name: 'red', onUse: true },
-      { id: 7, hex: '#fff9c4', name: 'yellow', onUse: true },
+      { id: 1, name: 'green' },
+      { id: 2, name: 'orange' },
+      { id: 3, name: 'indigo' },
+      { id: 4, name: 'purple' },
+      { id: 5, name: 'blue' },
+      { id: 6, name: 'red' },
+      { id: 7, name: 'yellow' },
     ],
   };
 
@@ -36,19 +36,15 @@ export class Main extends Component {
     try {
       const response = await axios.get('/main.json');
 
-      console.log(response.data)
-
-      if (response.data.todos && response.data.tasks && response.data.notes) {
+      if (response.data) {
         this.setState(response.data);
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
-  onClickTodo = () => {
-    console.log(this.state)
-  };
+  onClickTodo = () => {};
 
   addTodo = async (event, todoLevel, colorId) => {
     if (event.key === 'Enter' && event.target.value) {
@@ -87,21 +83,21 @@ export class Main extends Component {
 
       todos.push(obj);
 
-      event.target.value = ''
+      event.target.value = '';
       alert.show = false;
 
       try {
         await axios.put('/main/todos.json', todos);
         this.setState({ todos });
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
 
       try {
         await axios.put('/main/notes.json', notes);
         this.setState({ notes });
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
 
       this.setState({ alert });
@@ -171,6 +167,16 @@ export class Main extends Component {
         todoCheck = todo.done;
       }
     });
+
+    if (!idTodo) {
+      try {
+        await axios.put(`/main/todos.json`, todos);
+        this.setState({ todos });
+        return
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
     function findChildTask() {
       let filtered = tasks.filter(
@@ -256,7 +262,7 @@ export class Main extends Component {
         await axios.put('/main/notes.json', notes);
         this.setState({ notes });
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
 
@@ -297,7 +303,7 @@ export class Main extends Component {
         done: false,
       });
 
-      event.target.value = ''
+      event.target.value = '';
       alert.show = false;
 
       try {

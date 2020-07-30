@@ -4,7 +4,6 @@ import axios from '../axios/axios';
 import Modal from '../components/Modal';
 import Alert from '../components/Alert';
 
-import gear from '../images/gear.svg';
 import { CSSTransition } from 'react-transition-group';
 
 const Header = () => {
@@ -81,7 +80,7 @@ const Header = () => {
             <Fragment>
               <li key={t.id} onClick={() => changeTarget(t.id)}>
                 <div>{t.value}</div>
-                <img src={gear} alt="лого"/>
+                <i className="fa fa-book" aria-hidden="true"></i>
               </li>
             </Fragment>
           );
@@ -91,7 +90,7 @@ const Header = () => {
       <CSSTransition
         in={modalIsOpen}
         classNames={'modal'}
-        timeout={500}
+        timeout={0}
         mountOnEnter
         unmountOnExit
       >

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Color from './Color';
 import TodoItem from './TodoItem';
-import {CSSTransition } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 
 const Todo = (props) => {
   const [colorMenu, setColorMenu] = useState(false);
@@ -46,10 +46,10 @@ const Todo = (props) => {
 
       <div>
         <div className="input-group flex-nowrap">
-          <div
-            className={`color-btn color ${lastColor.name}`}
+          <i
+            className={`fa fa-retweet color-btn color ${lastColor.name}`}
             onClick={colorMenuToggle}
-          ></div>
+          ></i>
           <input
             type="text"
             className="form-control"
