@@ -1,6 +1,6 @@
 # Planning App
 
-Приложение для планирования с декомпозицией задач. 
+Приложение для планирования с декомпозицией задач.  
 Демонстрационная версия - [Planning App](https://planning-app-k.web.app/)
 
 ## Используется:
@@ -19,4 +19,4 @@
 * Декомпозиция задач и подзадач
 
 ## Демонстрация: 
-[![Демонстрация](https://s7.gifyu.com/images/planning-app.md.gif)](https://gifyu.com/image/cNZe)
+[![Демонстрация](https://s7.gifyu.com/images/planning-app.gif)](https://gifyu.com/image/cNZe)
