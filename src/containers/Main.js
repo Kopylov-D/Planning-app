@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import axios from '../axios/axios';
 
 import Todo from '../components/Todo';
-import { setID } from '../functions/functions';
 import Alert from '../components/Alert';
+import { setID } from '../utils/utils';
 
 export class Main extends Component {
   state = {
