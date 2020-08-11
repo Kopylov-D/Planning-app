@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "build",
+    "site": "planning-app-k",
     "ignore": [
       "firebase.json",
       "**/.*",
