@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../axios/axios';
 
 import Modal from '../components/Modal';
@@ -27,12 +27,12 @@ const Header = () => {
     const fetchData = async () => {
       const result = await axios.get('/header.json');
       setTarget(result.data);
-    }
+    };
 
-    fetchData()
+    fetchData();
   }, []);
 
-  function changeTarget(id) {
+  function changeTargetHandler(id) {
     setModalIsOpen(true);
     setCurrentId(id);
     let value = target.find((t) => t.id === id).value;
@@ -59,16 +59,24 @@ const Header = () => {
   };
 
   const submitTargetHandler = async () => {
-    let newtarget = { id: currentId, value: currentValue };
-    target.splice(currentId, 1, newtarget);
+    const newTarget = [...target];
+    newTarget.map((t) => {
+      if (t.id === currentId) {
+        t.value = currentValue;
+      }
+      return t;
+    });
+    setDisaled(true);
+    setModalIsOpen(false);
+    console.log(target)
+
     try {
-      await axios.put('/header.json', target);
-      setTarget(target);
+      await axios.put('/header.json', newTarget);
+      console.log('put');
+      setDisaled(false);
     } catch (e) {
       console.log(e);
     }
-
-    setModalIsOpen(false);
   };
 
   return (
@@ -77,12 +85,10 @@ const Header = () => {
       <ul className="targets">
         {target.map((t) => {
           return (
-            <Fragment>
-              <li key={t.id} onClick={() => changeTarget(t.id)}>
-                <div>{t.value}</div>
-                <i className="fa fa-book" aria-hidden="true"></i>
-              </li>
-            </Fragment>
+            <li key={t.id} onClick={() => changeTargetHandler(t.id)}>
+              <div>{t.value}</div>
+              <i className="fa fa-book" aria-hidden="true"></i>
+            </li>
           );
         })}
       </ul>
@@ -90,7 +96,7 @@ const Header = () => {
       <CSSTransition
         in={modalIsOpen}
         classNames={'modal'}
-        timeout={0}
+        timeout={800}
         mountOnEnter
         unmountOnExit
       >
