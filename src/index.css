@@ -99,12 +99,54 @@ code {
   .todolist {
     max-width: 800px;
   }
+
+  .add-todo-enter-active {
+    opacity: 1;
+    animation: add-todo 300ms ease-in alternate-reverse;
+  }
+
+  @keyframes add-todo {
+    0% {
+      transform: translateY(0);
+    }
+
+    30% {
+      opacity: 0.7;
+      transform: translateY(30px) rotate(15deg);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(-200px) rotate(3deg);
+    }
+  }
 }
 
 @media (min-width: 992px) {
   .main {
     flex-direction: row;
     justify-content: space-around;
+  }
+
+  .add-todo-enter-active {
+    opacity: 1;
+    animation: add-todo 300ms ease-in alternate-reverse;
+  }
+
+  @keyframes add-todo {
+    0% {
+      transform: translateX(0);
+    }
+
+    30% {
+      opacity: 0.7;
+      transform: translateX(-30px) rotate(15deg);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateX(200px) rotate(3deg);
+    }
   }
 }
 
@@ -156,7 +198,6 @@ code {
 .color-menu {
   padding: 6px;
   position: absolute;
-  /* cursor: pointer; */
   display: flex;
   list-style-type: none;
   background: #ffffff;
@@ -227,26 +268,6 @@ code {
   opacity: 0;
 }
 
-.todos-exit-active {
-  animation: todos 5000ms ease-out forwards;
-}
-
-@keyframes todos {
-  0% {
-    transform: translateX(0);
-  }
-
-  30% {
-    opacity: 0.7;
-    transform: translateX(30px);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(-200px);
-  }
-}
-
 .myModal {
   transform: translate(-50%, 0);
   position: absolute;
@@ -292,49 +313,81 @@ code {
   transition: opacity 300ms;
 }
 
-/* .item-enter {
+.add-todo-exit-active {
   opacity: 0;
-} */
-.item-enter-active {
-  opacity: 1;
-  animation: add-item 300ms ease-in alternate-reverse;
-}
-/* .item-exit {
-  opacity: 1;
-} */
-.item-exit-active {
-  opacity: 0;
-  animation: del-item 300ms ease-out forwards;
+  animation: del-todo 300ms ease-out forwards;
 }
 
-@keyframes add-item {
-  0% {
-    transform: translateY(0);
-  }
-
-  30% {
-    opacity: 0.7;
-    transform: translateY(30px) rotate(15deg);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-500px) rotate(3deg);
-  }
-}
-
-@keyframes del-item {
+@keyframes del-todo {
   0% {
     transform: translateX(0);
   }
 
   30% {
     opacity: 0.7;
-    transform: translateX(30px) ;
+    transform: translateX(30px);
   }
 
   100% {
     opacity: 0;
     transform: translateX(-200px);
+  }
+}
+
+/****************Loader*/
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgb(0, 0, 0);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
   }
 }

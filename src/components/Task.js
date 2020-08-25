@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Task = (props) => {
+const Task = props => {
   const classes = [];
 
   if (props.task.done) {
@@ -12,7 +12,7 @@ const Task = (props) => {
       <button
         type="button"
         className={'btn btn-primary btn-sm'}
-        onClick={(event) => props.decomposeTodo(event, props.task)}
+        onClick={event => props.decomposeTodo(event, props.task)}
       >
         <i className="fa fa-angle-double-left"></i>
       </button>

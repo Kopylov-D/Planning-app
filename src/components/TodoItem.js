@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 import Task from './Task';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-const TodoItem = (props) => {
+const TodoItem = props => {
   const classes = [];
 
   if (props.todo.done) {
@@ -19,17 +19,13 @@ const TodoItem = (props) => {
     arrowType = 'up';
   }
 
-  const tasksNum = props.tasks.filter((task) => task.idTodo === props.todo.id).length;
-  const doneTasks = props.tasks.filter(
-    (task) => task.idTodo === props.todo.id && task.done
-  ).length;
+  const tasksNum = props.tasks.filter(task => task.idTodo === props.todo.id).length;
+  const doneTasks = props.tasks.filter(task => task.idTodo === props.todo.id && task.done)
+    .length;
 
   return (
     <Fragment>
-      <li
-        className={`list-group-item todo color ${props.color.name}`}
-        onClick={() => props.onClickTodo(props.todo.id)}
-      >
+      <li className={`list-group-item todo color ${props.color.name}`}>
         <div className="todo">
           <input
             type="checkbox"
@@ -69,13 +65,13 @@ const TodoItem = (props) => {
       {props.todo.tasksIsOpen && (
         <ul className="list-group sub">
           {props.todoLevel === 1 ? (
-            props.notes.map((note) => {
+            props.notes.map(note => {
               if (note.idTodo === props.todo.id) {
                 return (
                   <textarea
                     key={note.id}
                     value={note.text}
-                    onChange={(event) => props.noteInput(event, props.todo.id)}
+                    onChange={event => props.noteInput(event, props.todo.id)}
                     placeholder="Доп информация"
                   ></textarea>
                 );
@@ -84,10 +80,10 @@ const TodoItem = (props) => {
           ) : (
             <TransitionGroup>
               {props.tasks
-                .filter((task) => task.idTodo === props.todo.id)
-                .map((task) => {
+                .filter(task => task.idTodo === props.todo.id)
+                .map(task => {
                   return (
-                    <CSSTransition key={task.id} timeout={300} classNames="item">
+                    <CSSTransition key={task.id} timeout={300} classNames="add-todo">
                       <Task
                         task={task}
                         idTodo={props.todo.id}
@@ -104,7 +100,7 @@ const TodoItem = (props) => {
                   className="form-control sub"
                   placeholder="Новая подзадача"
                   onChange={props.onChangeInput}
-                  onKeyDown={(event) =>
+                  onKeyDown={event =>
                     props.addTask(event, props.todo.id, props.todo.parentId)
                   }
                 />
