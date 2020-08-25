@@ -289,5 +289,52 @@ code {
 }
 .color-menu-exit-active {
   opacity: 0;
-  transition: opacity 500ms;
+  transition: opacity 300ms;
+}
+
+/* .item-enter {
+  opacity: 0;
+} */
+.item-enter-active {
+  opacity: 1;
+  animation: add-item 300ms ease-in alternate-reverse;
+}
+/* .item-exit {
+  opacity: 1;
+} */
+.item-exit-active {
+  opacity: 0;
+  animation: del-item 300ms ease-out forwards;
+}
+
+@keyframes add-item {
+  0% {
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 0.7;
+    transform: translateY(30px) rotate(15deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-500px) rotate(3deg);
+  }
+}
+
+@keyframes del-item {
+  0% {
+    transform: translateX(0);
+  }
+
+  30% {
+    opacity: 0.7;
+    transform: translateX(30px) ;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
 }

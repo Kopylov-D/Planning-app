@@ -13,6 +13,7 @@ export class Main extends Component {
       positionTop: '',
       show: false,
     },
+    disabledInput: false,
     todoCategory: [
       { level: 1, name: 'День' },
       { level: 2, name: 'Неделя' },
@@ -47,7 +48,7 @@ export class Main extends Component {
   onClickTodo = () => {};
 
   addTodo = async (event, todoLevel, colorId) => {
-    if (event.key === 'Enter' && event.target.value) {
+    if (event.key === 'Enter' && event.target.value && !this.state.disabledInput) {
       const alert = { ...this.state.alert };
 
       if (event.target.value.length > 30) {
@@ -61,6 +62,8 @@ export class Main extends Component {
         this.setState({ alert });
         return;
       }
+
+      this.setState({ disabledInput: true });
       const todos = [...this.state.todos];
       const notes = [...this.state.notes];
 
@@ -72,7 +75,7 @@ export class Main extends Component {
       }
 
       const obj = {
-        id: id,
+        id,
         parentId: id,
         todoLevel,
         text: event.target.value,
@@ -95,7 +98,7 @@ export class Main extends Component {
 
       try {
         await axios.put('/main/notes.json', notes);
-        this.setState({ notes });
+        this.setState({ notes, disabledInput: false });
       } catch (e) {
         console.error(e);
       }
@@ -172,7 +175,7 @@ export class Main extends Component {
       try {
         await axios.put(`/main/todos.json`, todos);
         this.setState({ todos });
-        return
+        return;
       } catch (e) {
         console.error(e);
       }

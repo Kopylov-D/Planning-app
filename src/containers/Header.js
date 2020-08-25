@@ -7,7 +7,7 @@ import Alert from '../components/Alert';
 import { CSSTransition } from 'react-transition-group';
 
 const Header = () => {
-  const [target, setTarget] = useState([
+  const [targets, setTarget] = useState([
     { id: 0, value: 'Новая цель 1' },
     { id: 1, value: 'Новая цель 2' },
     { id: 2, value: 'Новая цель 3' },
@@ -26,6 +26,7 @@ const Header = () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get('/header.json');
+      console.log(result.data)
       setTarget(result.data);
     };
 
@@ -35,7 +36,7 @@ const Header = () => {
   function changeTargetHandler(id) {
     setModalIsOpen(true);
     setCurrentId(id);
-    let value = target.find((t) => t.id === id).value;
+    let value = targets.find((t) => t.id === id).value;
     setCurrentValue(value);
   }
 
@@ -59,8 +60,10 @@ const Header = () => {
   };
 
   const submitTargetHandler = async () => {
-    const newTarget = [...target];
-    newTarget.map((t) => {
+    let newTarget = [...targets]
+
+    console.log(newTarget)
+    newTarget = newTarget.map((t) => {
       if (t.id === currentId) {
         t.value = currentValue;
       }
@@ -68,7 +71,8 @@ const Header = () => {
     });
     setDisaled(true);
     setModalIsOpen(false);
-    console.log(target)
+    console.log(targets)
+    console.log(newTarget)
 
     try {
       await axios.put('/header.json', newTarget);
@@ -83,7 +87,7 @@ const Header = () => {
     <div className="header rounded">
       <h3 className="m-1 pt-0 text-center">Планировщик</h3>
       <ul className="targets">
-        {target.map((t) => {
+        {targets.map((t) => {
           return (
             <li key={t.id} onClick={() => changeTargetHandler(t.id)}>
               <div>{t.value}</div>
@@ -96,7 +100,7 @@ const Header = () => {
       <CSSTransition
         in={modalIsOpen}
         classNames={'modal'}
-        timeout={800}
+        timeout={200}
         mountOnEnter
         unmountOnExit
       >

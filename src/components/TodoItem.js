@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 
 import Task from './Task';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const TodoItem = (props) => {
   const classes = [];
@@ -13,9 +14,9 @@ const TodoItem = (props) => {
     classes.push(props.className);
   }
 
-  let arrowType = 'down'
+  let arrowType = 'down';
   if (props.todo.tasksIsOpen) {
-    arrowType = 'up'
+    arrowType = 'up';
   }
 
   const tasksNum = props.tasks.filter((task) => task.idTodo === props.todo.id).length;
@@ -45,7 +46,7 @@ const TodoItem = (props) => {
           ></input>
           <div className={`ml-2 ${classes.join(' ')}`}>{props.todo.text}</div>
           <i
-            className={`fa fa-chevron-${arrowType} arrow` }
+            className={`fa fa-chevron-${arrowType} arrow`}
             aria-hidden="true"
             onClick={() => props.openTasks(props.todo.id)}
           ></i>
@@ -81,19 +82,20 @@ const TodoItem = (props) => {
               }
             })
           ) : (
-            <Fragment>
+            <TransitionGroup>
               {props.tasks
                 .filter((task) => task.idTodo === props.todo.id)
-                .map((task, index) => {
+                .map((task) => {
                   return (
-                    <Task
-                      key={index}
-                      task={task}
-                      idTodo={props.todo.id}
-                      color={props.color.name}
-                      deleteTask={props.deleteTask}
-                      decomposeTodo={props.decomposeTodo}
-                    />
+                    <CSSTransition key={task.id} timeout={300} classNames="item">
+                      <Task
+                        task={task}
+                        idTodo={props.todo.id}
+                        color={props.color.name}
+                        deleteTask={props.deleteTask}
+                        decomposeTodo={props.decomposeTodo}
+                      />
+                    </CSSTransition>
                   );
                 })}
               <div className="input-group flex-nowrap">
@@ -107,7 +109,7 @@ const TodoItem = (props) => {
                   }
                 />
               </div>
-            </Fragment>
+            </TransitionGroup>
           )}
         </ul>
       )}

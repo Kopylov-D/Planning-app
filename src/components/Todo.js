@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Color from './Color';
 import TodoItem from './TodoItem';
 
@@ -19,30 +19,31 @@ const Todo = (props) => {
   return (
     <div className="todolist">
       <h5 className="text-center m-1">{props.todoName}</h5>
-      <ul className="list-group">
-        {props.todos.map((todo, index) => {
+      <TransitionGroup component="ul" className="list-group">
+        {props.todos.map(todo => {
           if (todo.todoLevel === props.todoLevel) {
             return (
-              <TodoItem
-                key={index}
-                todo={todo}
-                todoLevel={props.todoLevel}
-                tasks={props.tasks}
-                notes={props.notes}
-                color={props.colors.find((color) => color.id === todo.colorId)}
-                onClickTodo={props.onClickTodo}
-                deleteTodo={props.deleteTodo}
-                deleteTask={props.deleteTask}
-                addTask={props.addTask}
-                onChecked={props.onChecked}
-                openTasks={props.openTasks}
-                decomposeTodo={props.decomposeTodo}
-                noteInput={props.noteInput}
-              />
+              <CSSTransition key={todo.id} timeout={300} classNames="item">
+                <TodoItem
+                  todo={todo}
+                  todoLevel={props.todoLevel}
+                  tasks={props.tasks}
+                  notes={props.notes}
+                  color={props.colors.find((color) => color.id === todo.colorId)}
+                  onClickTodo={props.onClickTodo}
+                  deleteTodo={props.deleteTodo}
+                  deleteTask={props.deleteTask}
+                  addTask={props.addTask}
+                  onChecked={props.onChecked}
+                  openTasks={props.openTasks}
+                  decomposeTodo={props.decomposeTodo}
+                  noteInput={props.noteInput}
+                />
+              </CSSTransition>
             );
           }
         })}
-      </ul>
+      </TransitionGroup>
 
       <div>
         <div className="input-group flex-nowrap">
