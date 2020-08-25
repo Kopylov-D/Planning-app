@@ -1,16 +1,16 @@
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
+import {CSSTransition} from 'react-transition-group';
 
-export default function Alert({ alert, closeAlert }) {
+export default function Alert({alert, closeAlert}) {
   const style = {
     left: alert.positionLeft,
     top: alert.positionTop,
-  }
+  };
 
   return (
     <CSSTransition
       in={alert.show}
-      timeout={{ enter: 350, exit: 500 }}
+      timeout={{enter: 350, exit: 500}}
       classNames={'alert'}
       mountOnEnter
       unmountOnExit

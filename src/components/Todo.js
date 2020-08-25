@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React, {useState} from 'react';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+
 import Color from './Color';
 import TodoItem from './TodoItem';
 
-const Todo = (props) => {
+const Todo = props => {
   const [colorMenu, setColorMenu] = useState(false);
-  const [lastColor, setLastColor] = useState({ id: 3, name: 'indigo' });
+  const [lastColor, setLastColor] = useState({id: 3, name: 'indigo'});
 
   const colorMenuToggle = () => {
     setColorMenu(!colorMenu);
   };
 
-  const selectColor = (color) => {
+  const selectColor = color => {
     setLastColor(color);
     colorMenuToggle();
   };
@@ -23,13 +24,13 @@ const Todo = (props) => {
         {props.todos.map(todo => {
           if (todo.todoLevel === props.todoLevel) {
             return (
-              <CSSTransition key={todo.id} timeout={300} classNames="item">
+              <CSSTransition key={todo.id} timeout={300} classNames="add-todo">
                 <TodoItem
                   todo={todo}
                   todoLevel={props.todoLevel}
                   tasks={props.tasks}
                   notes={props.notes}
-                  color={props.colors.find((color) => color.id === todo.colorId)}
+                  color={props.colors.find(color => color.id === todo.colorId)}
                   onClickTodo={props.onClickTodo}
                   deleteTodo={props.deleteTodo}
                   deleteTask={props.deleteTask}
@@ -56,7 +57,7 @@ const Todo = (props) => {
             className="form-control"
             placeholder="Новая задача"
             onChange={props.onChangeInput}
-            onKeyDown={(event) => props.addTodo(event, props.todoLevel, lastColor.id)}
+            onKeyDown={event => props.addTodo(event, props.todoLevel, lastColor.id)}
           />
         </div>
 
@@ -68,7 +69,7 @@ const Todo = (props) => {
           unmountOnExit
         >
           <ul className="color-menu">
-            {props.colors.map((color) => {
+            {props.colors.map(color => {
               return <Color key={color.id} color={color} onClick={selectColor} />;
             })}
           </ul>
