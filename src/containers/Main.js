@@ -43,10 +43,13 @@ export class Main extends Component {
       const response = await axios.get('/main.json');
       const data = response.data;
 
-      const allTasks = data.todos.length || 0;
+      let allTasks = 0;
       let doneTasks = 0;
 
-      data.todos.map(t => (t.done === true ? doneTasks++ : null));
+      if (data.todos) {
+        allTasks = data.todos.length;
+        data.todos.map(t => (t.done === true ? doneTasks++ : null));
+      }
 
       if (data) {
         this.setState({
