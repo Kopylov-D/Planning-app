@@ -6,7 +6,7 @@ import Alert from '../components/Alert';
 
 import {CSSTransition} from 'react-transition-group';
 
-const Header = () => {
+export default function Header() {
   const [targets, setTarget] = useState([
     {id: 0, value: ''},
     {id: 1, value: ''},
@@ -78,7 +78,7 @@ const Header = () => {
       console.log('put');
       setDisaled(false);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -118,6 +118,4 @@ const Header = () => {
       />
     </div>
   );
-};
-
-export default Header;
+}

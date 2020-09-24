@@ -4,7 +4,7 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import Color from './Color';
 import TodoItem from './TodoItem';
 
-const Todo = props => {
+export default function Todo(props) {
   const [colorMenu, setColorMenu] = useState(false);
   const [lastColor, setLastColor] = useState({id: 3, name: 'indigo'});
 
@@ -77,6 +77,4 @@ const Todo = props => {
       </div>
     </div>
   );
-};
-
-export default Todo;
+}

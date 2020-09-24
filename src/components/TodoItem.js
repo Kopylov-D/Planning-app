@@ -3,7 +3,7 @@ import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 import Task from './Task';
 
-const TodoItem = props => {
+export default function TodoItem(props) {
   const classes = [];
 
   if (props.todo.done) {
@@ -78,22 +78,30 @@ const TodoItem = props => {
               }
             })
           ) : (
-            <TransitionGroup>
-              {props.tasks
-                .filter(task => task.idTodo === props.todo.id)
-                .map(task => {
-                  return (
-                    <CSSTransition key={task.id} timeout={300} classNames="add-todo">
-                      <Task
-                        task={task}
-                        idTodo={props.todo.id}
-                        color={props.color.name}
-                        deleteTask={props.deleteTask}
-                        decomposeTodo={props.decomposeTodo}
-                      />
-                    </CSSTransition>
-                  );
-                })}
+            <Fragment>
+              <TransitionGroup>
+                {props.tasks
+                  .filter(task => task.idTodo === props.todo.id)
+                  .map(task => {
+                    return (
+                      <CSSTransition
+                        key={task.id}
+                        timeout={300}
+                        classNames="add-todo"
+                        mountOnEnter
+                        unmountOnExit
+                      >
+                        <Task
+                          task={task}
+                          idTodo={props.todo.id}
+                          color={props.color.name}
+                          deleteTask={props.deleteTask}
+                          decomposeTodo={props.decomposeTodo}
+                        />
+                      </CSSTransition>
+                    );
+                  })}
+              </TransitionGroup>
               <div className="input-group flex-nowrap">
                 <input
                   type="text"
@@ -105,12 +113,10 @@ const TodoItem = props => {
                   }
                 />
               </div>
-            </TransitionGroup>
+            </Fragment>
           )}
         </ul>
       )}
     </Fragment>
   );
-};
-
-export default TodoItem;
+}

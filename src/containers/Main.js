@@ -22,8 +22,8 @@ export class Main extends Component {
       {level: 2, name: 'Неделя'},
       {level: 3, name: 'Месяц'},
     ],
-    allTasks: 1,
-    doneTasks: 1,
+    allTasks: 0,
+    doneTasks: 0,
     todos: [],
     tasks: [],
     notes: [],
@@ -43,26 +43,37 @@ export class Main extends Component {
       const response = await axios.get('/main.json');
       const data = response.data;
 
-      let allTasks = 0;
-      let doneTasks = 0;
-
-      if (data.todos) {
-        allTasks = data.todos.length;
-        data.todos.map(t => (t.done === true ? doneTasks++ : null));
-      }
+      this.refreshStat(data.todos);
 
       if (data) {
         this.setState({
           ...data,
           loading: false,
-          allTasks,
-          doneTasks,
+        });
+      } else {
+        this.setState({
+          loading: false,
         });
       }
     } catch (e) {
       console.error(e);
     }
   }
+
+  refreshStat = data => {
+    let allTasks = 0;
+    let doneTasks = 0;
+
+    if (data) {
+      allTasks = data.length;
+      data.map(item => (item.done === true ? doneTasks++ : null));
+    }
+
+    this.setState({
+      allTasks,
+      doneTasks,
+    });
+  };
 
   addTodo = async (event, todoLevel, colorId) => {
     if (event.key === 'Enter' && event.target.value && !this.state.disabledInput) {
@@ -93,6 +104,7 @@ export class Main extends Component {
       const obj = {
         id,
         parentId: id,
+        idTodo: id,
         todoLevel,
         text: event.target.value,
         done: false,
@@ -105,11 +117,11 @@ export class Main extends Component {
       event.target.value = '';
       alert.show = false;
 
-      const allTasks = todos.length;
+      this.refreshStat(todos);
 
       try {
         await axios.put('/main/todos.json', todos);
-        this.setState({todos, allTasks});
+        this.setState({todos});
       } catch (e) {
         console.error(e);
       }
@@ -136,15 +148,12 @@ export class Main extends Component {
     if (todoLevel === 3) {
       todos = todos.filter(todo => todo.parentId !== parentId);
 
-      const allTasks = todos.length;
-      let doneTasks = 0;
-
-      todos.map(t => (t.done === true ? doneTasks++ : null));
+      this.refreshStat(todos);
 
       try {
         await axios.put(`/main/todos.json`, todos);
 
-        this.setState({todos, allTasks, doneTasks});
+        this.setState({todos});
       } catch (e) {
         console.error(e);
       }
@@ -152,14 +161,12 @@ export class Main extends Component {
 
     todos = todos.filter(todo => todo.id !== id);
     tasks = tasks.filter(task => task.idTodo !== id);
-    const allTasks = todos.length;
-    let doneTasks = 0;
 
-    todos.map(t => (t.done === true ? doneTasks++ : null));
+    this.refreshStat(todos);
 
     try {
       await axios.put(`/main/todos.json`, todos);
-      this.setState({todos, allTasks, doneTasks});
+      this.setState({todos});
     } catch (e) {
       console.error(e);
     }
@@ -199,19 +206,20 @@ export class Main extends Component {
     });
 
     if (!idTodo) {
-      let doneTasks = 0;
+      this.refreshStat(todos);
 
-      todos.map(t => (t.done === true ? doneTasks++ : null));
       try {
         await axios.put(`/main/todos.json`, todos);
-        this.setState({todos, doneTasks});
+        this.setState({todos});
         return;
       } catch (e) {
         console.error(e);
       }
     }
 
-    function findChildTask() {
+    console.log(todoCheck);
+
+    function findParents() {
       let filtered = tasks.filter(task => task.idTodo === idTodo && task.done === false);
 
       if (!filtered.length) {
@@ -231,37 +239,47 @@ export class Main extends Component {
 
     if (todoLevel === 1) {
       let task = tasks.find(task => task.id === id);
-      tasks.map(task => (task.id === id ? (task.done = todoCheck) : null));
-      idTodo = task.idTodo;
 
-      findChildTask();
+      if (task) {
+        tasks.map(task => (task.id === id ? (task.done = todoCheck) : null));
+        console.log(idTodo);
+        idTodo = task.idTodo;
 
-      let todo = todos.find(todo => todo.id === idTodo);
-      id = todo.id;
-      idTodo = todo.idTodo;
-      todoCheck = todo.done;
+        findParents();
 
-      tasks.map(task => (task.id === id ? (task.done = todoCheck) : null));
+        let todo = todos.find(todo => todo.id === idTodo);
+        id = todo.id;
+        idTodo = todo.idTodo;
+        todoCheck = todo.done;
 
-      findChildTask();
+        tasks.map(task => (task.id === id ? (task.done = todoCheck) : null));
+
+        findParents();
+      }
     }
 
     if (todoLevel === 2) {
       tasks.map(task => {
         if (task.idTodo === id) {
+          console.log(task);
           task.done = todoCheck;
           todos.map(todo => {
             if (todo.id === task.id) {
+              console.log(todo);
               todo.done = todoCheck;
             }
           });
         }
       });
 
-      tasks.map(task => (task.id === id ? (task.done = todoCheck) : null));
-      todos.map(todo => (todo.id === idTodo ? (todo.done = todoCheck) : null));
+      tasks.map(task => {
+        if (task.id === id) {
+          task.done = todoCheck;
+          findParents();
+        }
+      });
 
-      findChildTask();
+      todos.map(todo => (todo.id === id ? (todo.done = todoCheck) : null));
     }
 
     if (todoLevel === 3) {
@@ -269,13 +287,11 @@ export class Main extends Component {
       tasks.map(task => (task.parentId === parentId ? (task.done = todoCheck) : null));
     }
 
-    let doneTasks = 0;
-
-    todos.map(t => (t.done === true ? doneTasks++ : null));
+    this.refreshStat(todos);
 
     try {
       await axios.put(`/main/todos.json`, todos);
-      this.setState({todos, doneTasks});
+      this.setState({todos});
     } catch (e) {
       console.error(e);
     }
@@ -341,6 +357,8 @@ export class Main extends Component {
       event.target.value = '';
       alert.show = false;
 
+      this.refreshStat(todos);
+
       try {
         await axios.put(`/main/tasks.json`, tasks);
         this.setState({tasks});
@@ -386,6 +404,8 @@ export class Main extends Component {
         notes.push({id: setID(), idTodo: task.id, text: ''});
       }
     }
+
+    this.refreshStat(todos);
 
     try {
       await axios.put(`/main/todos.json`, todos);
