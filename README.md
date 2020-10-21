@@ -19,4 +19,4 @@
 * Декомпозиция задач и подзадач
 
 ## Демонстрация: 
-[![Демонстрация](https://s7.gifyu.com/images/planning-app.gif)](https://gifyu.com/image/cNZe)
+![todo.gif](https://s8.gifyu.com/images/todo.gif)
